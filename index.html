@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Calendar</h1>
+    <div class="calendar">
+      <div class="month"></div>
+      <div class="days flex float-left gap-2">
+        <div class="date w-[20px] h-[20px] text-center">S</div>
+        <div class="date w-[20px] h-[20px] text-center">M</div>
+        <div class="date w-[20px] h-[20px] text-center">T</div>
+        <div class="date w-[20px] h-[20px] text-center">W</div>
+        <div class="date w-[20px] h-[20px] text-center">T</div>
+        <div class="date w-[20px] h-[20px] text-center">F</div>
+        <div class="date w-[20px] h-[20px] text-center">S</div>
+      </div>
+      <br />
+      <div class="dates block grid grid-cols-7 float-left gap-2"></div>
+    </div>
+    <script src="./app.js"></script>
+  </body>
+</html>
