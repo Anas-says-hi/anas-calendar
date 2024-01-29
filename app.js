@@ -1,9 +1,9 @@
 let YEAR = new Date().getFullYear();
 let MONTH = new Date().getMonth() + 1;
 const TODAY = new Date().getDate();
-
+let selectedDate = null;
 const date = new Date(YEAR, MONTH, 0);
-const months = [
+const MONTHS = [
   "January",
   "February",
   "March",
@@ -16,6 +16,15 @@ const months = [
   "October",
   "November",
   "December",
+];
+const DAYS = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
 ];
 
 const monthElm = document.querySelector(".month");
@@ -53,8 +62,9 @@ function showCal() {
   for (let i = 1; i < days + 1; i++) {
     const wrapper = document.createElement("div");
     wrapper.className =
-    "date-elm text-center w-[30px] h-[30px] hover:bg-gray-200 flex justify-center items-center rounded-full select-none";
+      "date-elm text-center w-[30px] h-[30px] hover:bg-gray-200 flex justify-center items-center rounded-full select-none group relative";
     wrapper.innerHTML = i;
+    wrapper.innerHTML += `<div class="tip transition-opacity absolute top-[25px] bg-transparent text-transparent p-1 px-2 rounded-lg text-xs opacity-0 group-hover:opacity-100 group-hover:bg-black/70 group-hover:text-white z-[99]"></div>`;
     daysElm.append(wrapper);
   }
   for (let i = 0; i < currDay; i++) {
@@ -63,41 +73,60 @@ function showCal() {
     wrapper.innerHTML = "";
     daysElm.prepend(wrapper);
   }
-  
-  setMonthYear()
-  setCurrDate()
-  selectDates()
+
+  setMonthYear();
+  setCurrDate();
+  selectDates();
+  showDayOnHover();
 }
 
-
-function setCurrDate(){
+function showDayOnHover() {
   const dateElm = document.querySelectorAll(".date-elm");
-  const currMONTH = new Date().getMonth() + 1
-  const currYEAR = new Date().getFullYear()
-  
-  dateElm.forEach((d) => {
-    if (d.innerText === TODAY.toString() && currMONTH === MONTH && currYEAR === YEAR) {
-      d.classList.remove("hover:bg-gray-200");
-      d.classList.toggle("text-white");
-      d.classList.toggle("bg-emerald-600");
-      d.classList.toggle("hover:bg-emerald-700");
-    }
-  });
-}
 
-function selectDates(){
-  const dateElm = document.querySelectorAll(".date-elm");
-  
   dateElm.forEach((d) => {
-    d.addEventListener("click", () => {
-      d.classList.remove("hover:bg-gray-200");
-      d.classList.toggle("text-white");
-      d.classList.toggle("bg-emerald-600");
-      d.classList.toggle("hover:bg-emerald-700");
+    const hovered = parseInt(d.innerText);
+    const day = new Date(YEAR, MONTH -1 , parseInt(hovered)).getDay();
+    d.addEventListener("mouseenter", () => {
+      d.querySelector(".tip").innerHTML = DAYS[day]
     });
   });
 }
 
-function setMonthYear(){
-  monthElm.innerHTML = months[MONTH - 1] + " " + YEAR;
+function setCurrDate() {
+  const dateElm = document.querySelectorAll(".date-elm");
+  const currMONTH = new Date().getMonth() + 1;
+  const currYEAR = new Date().getFullYear();
+
+  dateElm.forEach((d) => {
+    if (
+      d.innerText === TODAY.toString() &&
+      currMONTH === MONTH &&
+      currYEAR === YEAR
+    ) {
+      d.id = "today";
+      d.classList.remove("hover:bg-gray-200");
+      d.classList.add("text-white");
+      d.classList.add("bg-emerald-700");
+      d.classList.add("hover:bg-emerald-800");
+    }
+  });
+}
+
+function selectDates() {
+  const dateElm = document.querySelectorAll(".date-elm");
+
+  dateElm.forEach((d) => {
+    d.addEventListener("click", () => {
+      if (d.id != "today") {
+        d.classList.remove("hover:bg-gray-200");
+        d.classList.toggle("text-white");
+        d.classList.toggle("bg-emerald-500");
+        d.classList.toggle("hover:bg-emerald-600");
+      }
+    });
+  });
+}
+
+function setMonthYear() {
+  monthElm.innerHTML = MONTHS[MONTH - 1] + " " + YEAR;
 }
