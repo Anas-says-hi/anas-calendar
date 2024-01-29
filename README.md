@@ -1,4 +1,4 @@
-![Anas Calendar](./assets/icons/icon.svg)
+<img src="./assets/icons/icon.svg" height="200px">
 
 # Anas Calendar
 
