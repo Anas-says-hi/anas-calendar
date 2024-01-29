@@ -5,86 +5,119 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Document</title>
+    <title>Anas Calendar</title>
   </head>
-  <body>
+  <body class="h-screen">
     <nav class="p-3 border-b">
       <p class="text-2xl">Anas Calendar</p>
     </nav>
-    <div class="calendar max-w-[258px] m-3">
-      <div class="info flex justify-between py-3 items-center">
-        <div class="month year text-[1.3rem] font-bold text-emerald-600"></div>
-        <div class="btns text-gray-700 flex gap-3">
+    <div class="container flex min-w-full min-h-full">
+      <div class="calendar max-w-[258px] m-3">
+        <div class="info flex justify-between py-3 items-center">
+          <div
+            class="month year text-[1.3rem] font-bold text-emerald-600"
+          ></div>
+          <div class="btns text-gray-700 flex gap-3">
+            <button
+              class="bg-gray-200 back-btn w-[30px] h-[30px] hover:bg-gray-300 flex justify-center items-center rounded-full"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="m9.55 12l7.35 7.35q.375.375.363.875t-.388.875q-.375.375-.875.375t-.875-.375l-7.7-7.675q-.3-.3-.45-.675t-.15-.75q0-.375.15-.75t.45-.675l7.7-7.7q.375-.375.888-.363t.887.388q.375.375.375.875t-.375.875z"
+                />
+              </svg>
+            </button>
+            <button
+              class="bg-gray-200 ford-btn w-[30px] h-[30px] hover:bg-gray-300 flex justify-center items-center rounded-full"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  d="m14.475 12l-7.35-7.35q-.375-.375-.363-.888t.388-.887q.375-.375.888-.375t.887.375l7.675 7.7q.3.3.45.675t.15.75q0 .375-.15.75t-.45.675l-7.7 7.7q-.375.375-.875.363T7.15 21.1q-.375-.375-.375-.888t.375-.887z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="days flex gap-2">
+          <div
+            class="day w-[30px] h-[30px] text-center flex text-gray-500 font-semibold justify-center text-sm items-center"
+          >
+            Sun
+          </div>
+          <div
+            class="day w-[30px] h-[30px] text-center flex text-gray-500 font-semibold justify-center text-sm items-center"
+          >
+            Mon
+          </div>
+          <div
+            class="day w-[30px] h-[30px] text-center flex text-gray-500 font-semibold justify-center text-sm items-center"
+          >
+            Tue
+          </div>
+          <div
+            class="day w-[30px] h-[30px] text-center flex text-gray-500 font-semibold justify-center text-sm items-center"
+          >
+            Wed
+          </div>
+          <div
+            class="day w-[30px] h-[30px] text-center flex text-gray-500 font-semibold justify-center text-sm items-center"
+          >
+            Thu
+          </div>
+          <div
+            class="day w-[30px] h-[30px] text-center flex text-gray-500 font-semibold justify-center text-sm items-center"
+          >
+            Fri
+          </div>
+          <div
+            class="day group relative w-[30px] h-[30px] text-center flex text-gray-500 font-semibold justify-center text-sm items-center"
+          >
+            Sat
+          </div>
+        </div>
+        <div class="dates block grid grid-cols-7 float-left gap-2"></div>
+      </div>
+      <div class="main border-l w-full">
+        <div
+          class="selected-date bg-emerald-600 text-white p-4 flex items-center justify-between"
+        >
+        <div class="header">
+          <p class="selected-date-text text-2xl font-semibold"></p>
+          <p class="selected-day"></p>
+        </div>
           <button
-            class="bg-gray-200 back-btn w-[30px] h-[30px] hover:bg-gray-300 flex justify-center items-center rounded-full"
+            class="bg-white hover:bg-emerald-50 gap-2 text-emerald-600 px-4 py-2 font-semibold rounded-full flex items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="1em"
-              height="1em"
+              width="1.4em"
+              height="1.4em"
               viewBox="0 0 24 24"
             >
               <path
                 fill="currentColor"
-                d="m9.55 12l7.35 7.35q.375.375.363.875t-.388.875q-.375.375-.875.375t-.875-.375l-7.7-7.675q-.3-.3-.45-.675t-.15-.75q0-.375.15-.75t.45-.675l7.7-7.7q.375-.375.888-.363t.887.388q.375.375.375.875t-.375.875z"
+                d="M11 13H6q-.425 0-.712-.288T5 12q0-.425.288-.712T6 11h5V6q0-.425.288-.712T12 5q.425 0 .713.288T13 6v5h5q.425 0 .713.288T19 12q0 .425-.288.713T18 13h-5v5q0 .425-.288.713T12 19q-.425 0-.712-.288T11 18z"
               />
             </svg>
-          </button>
-          <button
-            class="bg-gray-200 ford-btn w-[30px] h-[30px] hover:bg-gray-300 flex justify-center items-center rounded-full"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="1em"
-              height="1em"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="currentColor"
-                d="m14.475 12l-7.35-7.35q-.375-.375-.363-.888t.388-.887q.375-.375.888-.375t.887.375l7.675 7.7q.3.3.45.675t.15.75q0 .375-.15.75t-.45.675l-7.7 7.7q-.375.375-.875.363T7.15 21.1q-.375-.375-.375-.888t.375-.887z"
-              />
-            </svg>
+            Add Event
           </button>
         </div>
-      </div>
-      <div class="days flex gap-2">
-        <div
-          class="day w-[30px] h-[30px] text-center flex text-gray-500 font-semibold justify-center text-sm items-center"
-        >
-          Sun
-        </div>
-        <div
-          class="day w-[30px] h-[30px] text-center flex text-gray-500 font-semibold justify-center text-sm items-center"
-        >
-          Mon
-        </div>
-        <div
-          class="day w-[30px] h-[30px] text-center flex text-gray-500 font-semibold justify-center text-sm items-center"
-        >
-          Tue
-        </div>
-        <div
-          class="day w-[30px] h-[30px] text-center flex text-gray-500 font-semibold justify-center text-sm items-center"
-        >
-          Wed
-        </div>
-        <div
-          class="day w-[30px] h-[30px] text-center flex text-gray-500 font-semibold justify-center text-sm items-center"
-        >
-          Thu
-        </div>
-        <div
-          class="day w-[30px] h-[30px] text-center flex text-gray-500 font-semibold justify-center text-sm items-center"
-        >
-          Fri
-        </div>
-        <div
-          class="day group relative w-[30px] h-[30px] text-center flex text-gray-500 font-semibold justify-center text-sm items-center"
-        >
-          Sat
+        <div class="time-schedule">
+
         </div>
       </div>
-      <div class="dates block grid grid-cols-7 float-left gap-2"></div>
     </div>
     <script src="./app.js"></script>
   </body>

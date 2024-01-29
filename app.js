@@ -1,7 +1,11 @@
 let YEAR = new Date().getFullYear();
 let MONTH = new Date().getMonth() + 1;
 const TODAY = new Date().getDate();
-let selectedDate = null;
+let selectedDate = {
+  year: YEAR,
+  month: MONTH,
+  date: TODAY
+};
 const date = new Date(YEAR, MONTH, 0);
 const MONTHS = [
   "January",
@@ -78,6 +82,36 @@ function showCal() {
   setCurrDate();
   selectDates();
   showDayOnHover();
+  showSelectedDate()
+  showTimeSchedule()
+}
+
+function showTimeSchedule(){
+  const timeSchedule = document.querySelector(".time-schedule")
+  for (let i = 1; i < 12; i++) {
+    timeSchedule.innerHTML += `          <div class="time-block h-[200px] p-3 border-b">
+    <div class="time">${i} AM<br> <button class="text-emerald-600">            <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1.7em"
+      height="1.7em"
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill="currentColor"
+        d="M11 13H6q-.425 0-.712-.288T5 12q0-.425.288-.712T6 11h5V6q0-.425.288-.712T12 5q.425 0 .713.288T13 6v5h5q.425 0 .713.288T19 12q0 .425-.288.713T18 13h-5v5q0 .425-.288.713T12 19q-.425 0-.712-.288T11 18z"
+      />
+    </svg></button></div>
+  </div>`
+    
+  }
+}
+
+function showSelectedDate(){
+  const selectedDateText = document.querySelector(".selected-date-text") 
+  const selectedDay = document.querySelector(".selected-day") 
+  selectedDateText.innerText = `${selectedDate.date} ${MONTHS[selectedDate.month - 1]} ${selectedDate.year}`
+  selectedDay.innerText = DAYS[new Date(selectedDate.year,selectedDate.month -1 , selectedDate.date).getDay()];
+
 }
 
 function showDayOnHover() {
@@ -117,7 +151,19 @@ function selectDates() {
 
   dateElm.forEach((d) => {
     d.addEventListener("click", () => {
+      dateElm.forEach(d=>{
+        if(d.id != "today"){
+          d.classList.add("hover:bg-gray-200");
+          d.classList.remove("text-white");
+          d.classList.remove("bg-emerald-500");
+          d.classList.remove("hover:bg-emerald-600");
+        }
+      })
       if (d.id != "today") {
+        selectedDate.year = YEAR,
+        selectedDate.month = MONTH
+        selectedDate.date = parseInt(d.innerText)
+        showSelectedDate()
         d.classList.remove("hover:bg-gray-200");
         d.classList.toggle("text-white");
         d.classList.toggle("bg-emerald-500");
