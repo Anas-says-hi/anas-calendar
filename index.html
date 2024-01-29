@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Anas Calendar</title>
   </head>
-  <body class="h-screen">
+  <body class="h-screen overflow-hidden">
     <nav class="p-3 border-b">
       <p class="text-2xl">Anas Calendar</p>
     </nav>
@@ -114,25 +114,79 @@
             Add Event
           </button>
         </div>
-        <div class="time-schedule"></div>
+        <div class="time-schedule overflow-auto h-[583px]">
+          <!-- <div class="event p-3 rounded-lg bg-gray-200 w-full">Amongus</div>
+        </div> -->
+        </div>
       </div>
     </div>
-    <dialog id="test" class="absolute rounded-lg top-[50%] w-[60%] translate-y-[-50%] bg-white shadow-lg p-6">
-      <p class="text-2xl font-semibold pb-2">Add event</p>
-      <div class="inputs flex flex-col gap-2">
-        <div class="from-to w-full flex items-center gap-2">
-          <label>From:</label>
-          <input class="bg-gray-100 p-1.5 px-3 grow rounded-lg" type="time">
-          <label>To:</label>
-          <input class="bg-gray-100 p-1.5 px-3 grow rounded-lg" type="time">
-        </div>
-        <label>Title</label>
-        <input class="bg-gray-100 p-1.5 px-3  rounded-lg" type="text">
-        <label>Description</label>
-        <input class="bg-gray-100 p-1.5 px-3  rounded-lg" type="text">
+    <dialog
+      id="addTask"
+      class="absolute max-w-[500px] rounded-lg top-[50%] w-[60%] translate-y-[-50%] bg-white shadow-lg p-6"
+    >
+      <div class="header flex items-center justify-between mb-4">
+        <p class="text-2xl font-semibold">Add event</p>
+        <button
+          class="text-gray-600"
+          onclick="this.parentElement.parentElement.close()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="2em"
+            height="2em"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="currentColor"
+              d="m12 13.4l-4.9 4.9q-.275.275-.7.275t-.7-.275q-.275-.275-.275-.7t.275-.7l4.9-4.9l-4.9-4.9q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l4.9 4.9l4.9-4.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7L13.4 12l4.9 4.9q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275z"
+            />
+          </svg>
+        </button>
       </div>
-      <button class=" mt-2 bg-emerald-600 text-white px-3 py-2 rounded-lg">Cancel</button>
-      <button class="bg-emerald-600 text-white px-3 py-2 rounded-lg">Done</button>
+      <div class="inputs flex w-full flex-col gap-2">
+        <div class="from-to w-full flex items-center gap-2">
+          <label class="font-semibold">From:</label>
+          <input
+            class="bg-gray-100 border border-gray-300 p-1.5 px-3 grow rounded-lg"
+            type="time"
+            id="from-time"
+          />
+          <label class="font-semibold">To:</label>
+          <input
+            class="bg-gray-100 p-1.5 px-3 grow border border-gray-300 rounded-lg"
+            type="time"
+            id="to-time"
+          />
+        </div>
+        <label class="font-semibold">Title</label>
+        <input
+          class="bg-gray-100 p-1.5 px-3 rounded-lg border border-gray-300"
+          placeholder="Title"
+          type="text"
+          id="time-title"
+        />
+        <label class="font-semibold">Description</label>
+        <textarea
+          class="bg-gray-100 resize-none rounded-lg h-[100px] py-1.5 px-3 border border-gray-300"
+          placeholder="Description"
+          id="desc-title"
+
+        ></textarea>
+      </div>
+      <div class="btns float-right">
+        <button
+          onclick="this.parentElement.parentElement.close()"
+          class="mt-2 px-3 py-2 rounded-lg hover:bg-gray-200 mr-2"
+        >
+          Cancel
+        </button>
+        <button
+          id="submit"
+          class="bg-emerald-600 text-white px-3 py-2 rounded-lg hover:bg-emerald-700"
+        >
+          Done
+        </button>
+      </div>
     </dialog>
     <script src="./app.js"></script>
   </body>
