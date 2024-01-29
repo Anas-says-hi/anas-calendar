@@ -1,0 +1,8 @@
+@font-face {
+    font-family: "Geist";
+    src: url("./fonts/GeistVariableVF.woff2");
+}
+
+*{
+    font-family: Geist;
+}
