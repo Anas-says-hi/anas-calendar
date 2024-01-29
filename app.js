@@ -1,8 +1,8 @@
-let YEAR = 2024;
-let MONTH = 11;
+let YEAR = new Date().getFullYear();
+let MONTH = new Date().getMonth() + 1;
+const TODAY = new Date().getDate();
 
 const date = new Date(YEAR, MONTH, 0);
-const days = date.getDate();
 const months = [
   "January",
   "February",
@@ -46,12 +46,14 @@ showCal();
 
 function showCal() {
   daysElm.innerHTML = "";
+  const date = new Date(YEAR, MONTH, 0);
+  const days = date.getDate();
   const currDay = new Date(YEAR, MONTH - 1, 1).getDay();
-  monthElm.innerHTML = months[MONTH - 1] + " " + YEAR;
+
   for (let i = 1; i < days + 1; i++) {
     const wrapper = document.createElement("div");
     wrapper.className =
-      "date-elm text-center w-[30px] h-[30px] hover:bg-gray-200 flex justify-center items-center rounded-full select-none";
+    "date-elm text-center w-[30px] h-[30px] hover:bg-gray-200 flex justify-center items-center rounded-full select-none";
     wrapper.innerHTML = i;
     daysElm.append(wrapper);
   }
@@ -61,9 +63,31 @@ function showCal() {
     wrapper.innerHTML = "";
     daysElm.prepend(wrapper);
   }
+  
+  setMonthYear()
+  setCurrDate()
+  selectDates()
+}
 
+
+function setCurrDate(){
   const dateElm = document.querySelectorAll(".date-elm");
+  const currMONTH = new Date().getMonth() + 1
+  const currYEAR = new Date().getFullYear()
+  
+  dateElm.forEach((d) => {
+    if (d.innerText === TODAY.toString() && currMONTH === MONTH && currYEAR === YEAR) {
+      d.classList.remove("hover:bg-gray-200");
+      d.classList.toggle("text-white");
+      d.classList.toggle("bg-emerald-600");
+      d.classList.toggle("hover:bg-emerald-700");
+    }
+  });
+}
 
+function selectDates(){
+  const dateElm = document.querySelectorAll(".date-elm");
+  
   dateElm.forEach((d) => {
     d.addEventListener("click", () => {
       d.classList.remove("hover:bg-gray-200");
@@ -72,4 +96,8 @@ function showCal() {
       d.classList.toggle("hover:bg-emerald-700");
     });
   });
+}
+
+function setMonthYear(){
+  monthElm.innerHTML = months[MONTH - 1] + " " + YEAR;
 }
