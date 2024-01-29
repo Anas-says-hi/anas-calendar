@@ -93,10 +93,10 @@
         <div
           class="selected-date bg-emerald-600 text-white p-4 flex items-center justify-between"
         >
-        <div class="header">
-          <p class="selected-date-text text-2xl font-semibold"></p>
-          <p class="selected-day"></p>
-        </div>
+          <div class="header">
+            <p class="selected-date-text text-2xl font-semibold"></p>
+            <p class="selected-day"></p>
+          </div>
           <button
             class="bg-white hover:bg-emerald-50 gap-2 text-emerald-600 px-4 py-2 font-semibold rounded-full flex items-center"
           >
@@ -114,11 +114,26 @@
             Add Event
           </button>
         </div>
-        <div class="time-schedule">
-
-        </div>
+        <div class="time-schedule"></div>
       </div>
     </div>
+    <dialog id="test" class="absolute rounded-lg top-[50%] w-[60%] translate-y-[-50%] bg-white shadow-lg p-6">
+      <p class="text-2xl font-semibold pb-2">Add event</p>
+      <div class="inputs flex flex-col gap-2">
+        <div class="from-to w-full flex items-center gap-2">
+          <label>From:</label>
+          <input class="bg-gray-100 p-1.5 px-3 grow rounded-lg" type="time">
+          <label>To:</label>
+          <input class="bg-gray-100 p-1.5 px-3 grow rounded-lg" type="time">
+        </div>
+        <label>Title</label>
+        <input class="bg-gray-100 p-1.5 px-3  rounded-lg" type="text">
+        <label>Description</label>
+        <input class="bg-gray-100 p-1.5 px-3  rounded-lg" type="text">
+      </div>
+      <button class=" mt-2 bg-emerald-600 text-white px-3 py-2 rounded-lg">Cancel</button>
+      <button class="bg-emerald-600 text-white px-3 py-2 rounded-lg">Done</button>
+    </dialog>
     <script src="./app.js"></script>
   </body>
 </html>

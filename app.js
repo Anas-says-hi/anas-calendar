@@ -89,7 +89,7 @@ function showCal() {
 function showTimeSchedule(){
   const timeSchedule = document.querySelector(".time-schedule")
   for (let i = 1; i < 12; i++) {
-    timeSchedule.innerHTML += `          <div class="time-block h-[200px] p-3 border-b">
+    timeSchedule.innerHTML += `<div class="time-block h-[200px] p-3 border-b">
     <div class="time">${i} AM<br> <button class="text-emerald-600">            <svg
       xmlns="http://www.w3.org/2000/svg"
       width="1.7em"
@@ -101,8 +101,23 @@ function showTimeSchedule(){
         d="M11 13H6q-.425 0-.712-.288T5 12q0-.425.288-.712T6 11h5V6q0-.425.288-.712T12 5q.425 0 .713.288T13 6v5h5q.425 0 .713.288T19 12q0 .425-.288.713T18 13h-5v5q0 .425-.288.713T12 19q-.425 0-.712-.288T11 18z"
       />
     </svg></button></div>
-  </div>`
+  </div>`  
+  }
+  for (let i = 1; i < 12; i++) {
+    timeSchedule.innerHTML += `<div class="time-block h-[200px] p-3 border-b">
+    <div class="time">${i} PM<br> <button class="text-emerald-600">            <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="1.7em"
+      height="1.7em"
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill="currentColor"
+        d="M11 13H6q-.425 0-.712-.288T5 12q0-.425.288-.712T6 11h5V6q0-.425.288-.712T12 5q.425 0 .713.288T13 6v5h5q.425 0 .713.288T19 12q0 .425-.288.713T18 13h-5v5q0 .425-.288.713T12 19q-.425 0-.712-.288T11 18z"
+      />
+    </svg></button></div>
     
+  </div>`  
   }
 }
 
