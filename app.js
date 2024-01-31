@@ -188,31 +188,29 @@ addEventBtn.addEventListener("click", () => {
 function addEvents() {
   const addEventBtns = document.querySelectorAll("#addEventBtn");
   addEventBtns.forEach((a) => {
-    a.addEventListener("click", () => {
-      addModalFunctions(
-        addTaskModal,
-        a.parentElement.innerText,
-        a.parentElement.parentElement
-      );
-    });
+    // a.addEventListener("click", (e) => {
+    //   addModalFunctions(
+    //     addTaskModal,
+    //     e.target.parentElement.innerText,
+    //     e.target.parentElement.parentElement
+    //   );
+    // });
   });
 }
 
+const tasks = [];
+
 function addModalFunctions(dialog, timeText, timeBlock) {
   dialog.showModal();
-  const timeBlockElms = document.querySelectorAll(".time-block");
+  console.log("hm")
   const subBtn = dialog.querySelector("#submit");
   const fromTime = document.querySelector("#from-time");
   const title = document.querySelector("#title-time");
   const desc = document.querySelector("#desc-time");
   const toTime = document.querySelector("#to-time");
 
-  const minTime = timeText
-    ? addLeadingZero(timeText.replace(" ", "")) + ":00"
-    : "";
-  const maxTime = timeText
-    ? addLeadingZero(timeText.replace(" ", "")) + ":59"
-    : "";
+  const minTime = timeText ? convertTo24HourFormat(timeText) + ":00" : "";
+  const maxTime = timeText ? convertTo24HourFormat(timeText) + ":59" : "";
 
   if (timeText) {
     fromTime.setAttribute("min", minTime);
@@ -273,27 +271,55 @@ function addModalFunctions(dialog, timeText, timeBlock) {
   });
 
   subBtn.addEventListener("click", () => {
-    const y = (200 / 59) * fromMins;
+    console.log("clicked")
     let toTimeMins = parseInt(toTime.value.split(":")[1]);
-    const mins = (toHH - fromHH) * 60 + toTimeMins;
-    const height = (200 / 59) * mins;
+    let fromTimeMins = parseInt(fromTime.value.split(":")[1]);
+    let fromTimeHH = parseInt(fromTime.value.split(":")[0]);
+    let toTimeHH = parseInt(toTime.value.split(":")[0]);
 
-    timeBlockElms.forEach((elm) => {
-      if (elm.querySelector(".time-info").innerText === fromTimeID) {
-        elm.querySelector(
-          ".events"
-        ).innerHTML += `<div class="event absolute h-[${height}px] top-[${y}px] p-3 rounded-lg bg-gray-200 w-full">${fromTime.value} - ${toTime.value} ${title.value}</div>
-        </div>`;
-      }
-    });
+    const y = (200 / 59) * fromTimeMins;
+    const mins = (toTimeHH - fromTimeHH) * 60 + toTimeMins;
+    const height = (200 / 59) * mins - y;
+
+    tasks.push({
+      html: `<div class="event absolute w-[100px] h-[${height}px] top-[${y}px] left-[70px] p-3 rounded-lg bg-gray-200 w-full">${fromTime.value} - ${toTime.value} ${title.value}</div>
+      </div>`,
+    })
+
+    displayTasks()
+
     dialog.close();
   });
 }
 
-function addLeadingZero(time12) {
-  var [hour] = time12.split(/(?=[apmAPM])/);
-  hour = hour.length === 1 ? "0" + hour : hour;
-  return hour;
+function displayTasks(){
+  document.querySelectorAll(".event").forEach((e)=>e.remove())
+  tasks.forEach(t => {
+    document.querySelector(
+      ".time-schedule"
+    ).innerHTML += t.html
+
+  })
+}
+
+function convertTo24HourFormat(timeString) {
+  const match = timeString.match(/(\d+)[^\d]?([APMapm]{2})/);
+
+  if (!match) {
+    return "Invalid time format";
+  }
+
+  let hour = parseInt(match[1], 10);
+  const period = match[2].toUpperCase();
+
+  if (period === "PM" && hour !== 12) {
+    hour += 12;
+  } else if (period === "AM" && hour === 12) {
+    hour = 0;
+  }
+
+  const result = hour.toString().padStart(2, "0");
+  return result;
 }
 
 function showSelectedDate() {
