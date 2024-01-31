@@ -90,8 +90,8 @@ function showTimeSchedule() {
   const timeSchedule = document.querySelector(".time-schedule");
   for (let i = 1; i <= 12; i++) {
     if (i < 12) {
-      timeSchedule.innerHTML += `<div class="time-block h-[200px] p-3 border-b flex gap-3">
-      <div class="time">
+      timeSchedule.innerHTML += `<div class="time-block h-[200px] border-b flex gap-3">
+      <div class="time p-3">
         <p class="time-info">${i} AM</p>
         <button id="addEventBtn" class="text-emerald-600 hover:bg-gray-100 rounded-full p-1">
           <svg
@@ -110,8 +110,8 @@ function showTimeSchedule() {
       <div class="events relative grow"></div>
     </div>`;
     } else {
-      timeSchedule.innerHTML += `<div class="time-block h-[200px] p-3 border-b flex gap-3">
-  <div class="time">
+      timeSchedule.innerHTML += `<div class="time-block h-[200px] border-b flex gap-3">
+  <div class="time p-3">
     <p class="time-info">${i} PM</p>
     <button id="addEventBtn" class="text-emerald-600 hover:bg-gray-100 rounded-full p-1">
       <svg
@@ -133,8 +133,8 @@ function showTimeSchedule() {
   }
   for (let i = 1; i <= 12; i++) {
     if (i < 12) {
-      timeSchedule.innerHTML += `<div class="time-block h-[200px] p-3 border-b flex gap-3">
-      <div class="time">
+      timeSchedule.innerHTML += `<div class="time-block h-[200px] border-b flex gap-3">
+      <div class="time p-3">
         <p class="time-info">${i} PM</p>
         <button id="addEventBtn" class="text-emerald-600 hover:bg-gray-100 rounded-full p-1">
           <svg
@@ -153,8 +153,8 @@ function showTimeSchedule() {
       <div class="events relative grow"></div>
     </div>`;
     } else {
-      timeSchedule.innerHTML += `<div class="time-block h-[200px] p-3 border-b flex gap-3">
-  <div class="time">
+      timeSchedule.innerHTML += `<div class="time-block h-[200px] border-b flex gap-3">
+  <div class="time p-3">
     <p class="time-info">${i} AM</p>
     <button id="addEventBtn" class="text-emerald-600 hover:bg-gray-100 rounded-full p-1">
       <svg
@@ -250,11 +250,17 @@ function addModalFunctions(dialog, timeText, timeBlock) {
   });
 
   setInterval(() => {
-    const mins1 = parseInt(fromTime.value.split(":")[0]) * 60 + parseInt(fromTime.value.split(":")[1]);
-    const mins2 = parseInt(toTime.value.split(":")[0]) * 60 + parseInt(toTime.value.split(":")[1]);
+    const mins1 =
+      parseInt(fromTime.value.split(":")[0]) * 60 +
+      parseInt(fromTime.value.split(":")[1]);
+    const mins2 =
+      parseInt(toTime.value.split(":")[0]) * 60 +
+      parseInt(toTime.value.split(":")[1]);
     if (mins1 > mins2) {
-      const hours = toTime.value.split(":")[0]
-      toTime.value = `${toTime.value.split(":")[0]+ ":" + addLeadingZero(fromMins.toString())}`
+      const hours = toTime.value.split(":")[0];
+      toTime.value = `${
+        toTime.value.split(":")[0] + ":" + addLeadingZero(fromMins.toString())
+      }`;
     }
   });
 
@@ -267,8 +273,10 @@ function addModalFunctions(dialog, timeText, timeBlock) {
   });
 
   subBtn.addEventListener("click", () => {
-    const y = ((200 - 12) / 59) * fromMins;
-    const height = ((200 - 12) / 59) * toMins + (toHH - 1) * 200 - y;
+    const y = (200 / 59) * fromMins;
+    let toTimeMins = parseInt(toTime.value.split(":")[1]);
+    const mins = (toHH - fromHH) * 60 + toTimeMins;
+    const height = (200 / 59) * mins;
 
     timeBlockElms.forEach((elm) => {
       if (elm.querySelector(".time-info").innerText === fromTimeID) {
