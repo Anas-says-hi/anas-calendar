@@ -92,7 +92,7 @@ function showTimeSchedule() {
     if (i < 12) {
       timeSchedule.innerHTML += `<div class="time-block h-[200px] p-3 border-b flex gap-3">
       <div class="time">
-        ${i} AM<br />
+        <p class="time-info">${i} AM</p>
         <button id="addEventBtn" class="text-emerald-600 hover:bg-gray-100 rounded-full p-1">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -107,12 +107,12 @@ function showTimeSchedule() {
           </svg>
         </button>
       </div>
-      <div class="events grow"></div>
+      <div class="events relative grow"></div>
     </div>`;
     } else {
       timeSchedule.innerHTML += `<div class="time-block h-[200px] p-3 border-b flex gap-3">
   <div class="time">
-    ${i} PM<br />
+    <p class="time-info">${i} PM</p>
     <button id="addEventBtn" class="text-emerald-600 hover:bg-gray-100 rounded-full p-1">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -127,7 +127,7 @@ function showTimeSchedule() {
       </svg>
     </button>
   </div>
-  <div class="events grow"></div>
+  <div class="events relative grow"></div>
 </div>`;
     }
   }
@@ -135,7 +135,7 @@ function showTimeSchedule() {
     if (i < 12) {
       timeSchedule.innerHTML += `<div class="time-block h-[200px] p-3 border-b flex gap-3">
       <div class="time">
-        ${i} PM<br />
+        <p class="time-info">${i} PM</p>
         <button id="addEventBtn" class="text-emerald-600 hover:bg-gray-100 rounded-full p-1">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -150,12 +150,12 @@ function showTimeSchedule() {
           </svg>
         </button>
       </div>
-      <div class="events grow"></div>
+      <div class="events relative grow"></div>
     </div>`;
     } else {
       timeSchedule.innerHTML += `<div class="time-block h-[200px] p-3 border-b flex gap-3">
   <div class="time">
-    ${i} AM<br />
+    <p class="time-info">${i} AM</p>
     <button id="addEventBtn" class="text-emerald-600 hover:bg-gray-100 rounded-full p-1">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -170,7 +170,7 @@ function showTimeSchedule() {
       </svg>
     </button>
   </div>
-  <div class="events grow"></div>
+  <div class="events relative grow"></div>
 </div>`;
     }
   }
@@ -178,62 +178,113 @@ function showTimeSchedule() {
   addEvents();
 }
 
+const addEventBtn = document.querySelector("#addEventBtn");
+const addTaskModal = document.querySelector("#addTask");
+
+addEventBtn.addEventListener("click", () => {
+  addModalFunctions(addTaskModal, null, null);
+});
+
 function addEvents() {
   const addEventBtns = document.querySelectorAll("#addEventBtn");
-  const addTaskModal = document.querySelector("#addTask");
   addEventBtns.forEach((a) => {
     a.addEventListener("click", () => {
-      addTaskModal.showModal();
-      addModalFunctions(addTaskModal, a.parentElement.innerText);
+      addModalFunctions(
+        addTaskModal,
+        a.parentElement.innerText,
+        a.parentElement.parentElement
+      );
     });
   });
 }
 
-function addModalFunctions(elm, timeText) {
-  const subBtn = elm.querySelector("#submit");
+function addModalFunctions(dialog, timeText, timeBlock) {
+  dialog.showModal();
+  const timeBlockElms = document.querySelectorAll(".time-block");
+  const subBtn = dialog.querySelector("#submit");
   const fromTime = document.querySelector("#from-time");
-  const toTime = document.querySelector("#to-time")
-  
-  const minTime = addLeadingZero(timeText.replace(" ", ""))+ ":00"
-  const maxTime = addLeadingZero(timeText.replace(" ", ""))+ ":59"
-  
-  fromTime.setAttribute("min", minTime);
-  fromTime.setAttribute("max", maxTime);
-  toTime.setAttribute("min", minTime);
-  toTime.setAttribute("max", maxTime);
+  const title = document.querySelector("#title-time");
+  const desc = document.querySelector("#desc-time");
+  const toTime = document.querySelector("#to-time");
 
-  fromTime.value = minTime
-  toTime.value = maxTime
-  
+  const minTime = timeText
+    ? addLeadingZero(timeText.replace(" ", "")) + ":00"
+    : "";
+  const maxTime = timeText
+    ? addLeadingZero(timeText.replace(" ", "")) + ":59"
+    : "";
+
+  if (timeText) {
+    fromTime.setAttribute("min", minTime);
+    fromTime.setAttribute("max", maxTime);
+    toTime.setAttribute("min", minTime);
+    toTime.setAttribute("max", maxTime);
+    fromTime.value = minTime;
+    toTime.value = maxTime;
+  } else {
+    fromTime.value = "01:00";
+    toTime.value = "01:59";
+  }
+
+  let fromMins = parseInt(fromTime.value.split(":")[1]);
+  let fromHH = parseInt(fromTime.value.split(":")[0]);
+  let toMins = parseInt(toTime.value.split(":")[1]);
+  let toHH = parseInt(toTime.value.split(":")[0]);
+
+  let fromTimeID =
+    parseInt(fromTime.value) > 12
+      ? parseInt(fromTime.value) - 12 + " PM"
+      : parseInt(fromTime.value) + " AM";
+
   fromTime.addEventListener("input", (e) => {
-    const selectedTime = e.target.value;
-    if (new Date(selectedTime) < new Date(minTime)) {
-      e.target.value = minTime;
-    } else if (new Date(selectedTime) > new Date(maxTime)) {
-      e.target.value = maxTime;
+    fromMins = parseInt(fromTime.value.split(":")[1]);
+    fromHH = parseInt(fromTime.value.split(":")[0]);
+    fromTimeID =
+      parseInt(fromTime.value) > 12
+        ? parseInt(fromTime.value) - 12 + " PM"
+        : parseInt(fromTime.value) + " AM";
+
+    if (toHH < fromHH) {
+      toTime.value = fromTime.value;
+    }
+  });
+
+  setInterval(() => {
+    const mins1 = parseInt(fromTime.value.split(":")[0]) * 60 + parseInt(fromTime.value.split(":")[1]);
+    const mins2 = parseInt(toTime.value.split(":")[0]) * 60 + parseInt(toTime.value.split(":")[1]);
+    if (mins1 > mins2) {
+      const hours = toTime.value.split(":")[0]
+      toTime.value = `${toTime.value.split(":")[0]+ ":" + addLeadingZero(fromMins.toString())}`
     }
   });
 
   toTime.addEventListener("input", (e) => {
-    const selectedTime = e.target.value;
-    if (new Date(selectedTime) < new Date(minTime)) {
-      e.target.value = minTime;
-    } else if (new Date(selectedTime) > new Date(maxTime)) {
-      e.target.value = maxTime;
+    toMins = parseInt(fromTime.value.split(":")[1]);
+    toHH = parseInt(toTime.value.split(":")[0]);
+    if (toHH < fromHH) {
+      toTime.value = fromTime.value;
     }
   });
 
-  subBtn.addEventListener("click", ()=>{
-    
-  })
+  subBtn.addEventListener("click", () => {
+    const y = ((200 - 12) / 59) * fromMins;
+    const height = ((200 - 12) / 59) * toMins + (toHH - 1) * 200 - y;
+
+    timeBlockElms.forEach((elm) => {
+      if (elm.querySelector(".time-info").innerText === fromTimeID) {
+        elm.querySelector(
+          ".events"
+        ).innerHTML += `<div class="event absolute h-[${height}px] top-[${y}px] p-3 rounded-lg bg-gray-200 w-full">${fromTime.value} - ${toTime.value} ${title.value}</div>
+        </div>`;
+      }
+    });
+    dialog.close();
+  });
 }
 
 function addLeadingZero(time12) {
   var [hour] = time12.split(/(?=[apmAPM])/);
-
-  // Add leading zero if needed
-  hour = (hour.length === 1) ? '0' + hour : hour;
-
+  hour = hour.length === 1 ? "0" + hour : hour;
   return hour;
 }
 

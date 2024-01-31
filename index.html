@@ -10,7 +10,7 @@
   </head>
   <body class="h-screen overflow-hidden">
     <nav class="p-3 border-b">
-      <p class="text-2xl">Anas Calendar</p>
+      <p class="text-2xl flex gap-2 items-center"><img src="./assets/icons/icon.svg" alt="Anas Calendar" class="h-[30px]" srcset="">Anas Calendar</p>
     </nav>
     <div class="container flex min-w-full min-h-full">
       <div class="calendar max-w-[258px] m-3">
@@ -99,6 +99,7 @@
             <p class="selected-day"></p>
           </div>
           <button
+          id="addEventBtn"
             class="bg-white hover:bg-emerald-50 gap-2 text-emerald-600 px-4 py-2 font-semibold rounded-full flex items-center"
           >
             <svg
@@ -116,8 +117,7 @@
           </button>
         </div>
         <div class="time-schedule overflow-auto h-[583px]">
-          <!-- <div class="event p-3 rounded-lg bg-gray-200 w-full">Amongus</div>
-        </div> -->
+
         </div>
       </div>
     </div>
@@ -164,7 +164,8 @@
           class="bg-gray-100 p-1.5 px-3 rounded-lg border border-gray-300"
           placeholder="Title"
           type="text"
-          id="time-title"
+          id="title-time"
+          value="Hello"
         />
         <label class="font-semibold">Description</label>
         <textarea
