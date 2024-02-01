@@ -179,10 +179,10 @@ function showTimeSchedule() {
 }
 
 const addEventBtn = document.querySelector("#addEventBtn");
-const addTaskModal = document.querySelector("#addTask");
+const dialog = document.querySelector("#addTask");
 
 addEventBtn.addEventListener("click", () => {
-  addModalFunctions(addTaskModal, null, null);
+  addModalFunctions(dialog, null, null);
 });
 
 function addEvents() {
@@ -202,11 +202,7 @@ const tasks = [];
 
 function addModalFunctions(dialog, timeText, timeBlock) {
   dialog.showModal();
-  console.log("hm")
-  const subBtn = dialog.querySelector("#submit");
   const fromTime = document.querySelector("#from-time");
-  const title = document.querySelector("#title-time");
-  const desc = document.querySelector("#desc-time");
   const toTime = document.querySelector("#to-time");
 
   const minTime = timeText ? convertTo24HourFormat(timeText) + ":00" : "";
@@ -269,37 +265,44 @@ function addModalFunctions(dialog, timeText, timeBlock) {
       toTime.value = fromTime.value;
     }
   });
-
-  subBtn.addEventListener("click", () => {
-    console.log("clicked")
-    let toTimeMins = parseInt(toTime.value.split(":")[1]);
-    let fromTimeMins = parseInt(fromTime.value.split(":")[1]);
-    let fromTimeHH = parseInt(fromTime.value.split(":")[0]);
-    let toTimeHH = parseInt(toTime.value.split(":")[0]);
-
-    const y = (200 / 59) * fromTimeMins;
-    const mins = (toTimeHH - fromTimeHH) * 60 + toTimeMins;
-    const height = (200 / 59) * mins - y;
-
-    tasks.push({
-      html: `<div class="event absolute w-[100px] h-[${height}px] top-[${y}px] left-[70px] p-3 rounded-lg bg-gray-200 w-full">${fromTime.value} - ${toTime.value} ${title.value}</div>
-      </div>`,
-    })
-
-    displayTasks()
-
-    dialog.close();
-  });
 }
 
-function displayTasks(){
-  document.querySelectorAll(".event").forEach((e)=>e.remove())
-  tasks.forEach(t => {
-    document.querySelector(
-      ".time-schedule"
-    ).innerHTML += t.html
+const subBtn = document.querySelector("#submit");
 
-  })
+subBtn.addEventListener("click", (e) => {
+  addTask();
+});
+
+function addTask() {
+  console.log("clicked");
+  const fromTime = document.querySelector("#from-time");
+  const toTime = document.querySelector("#to-time");
+  let toTimeMins = parseInt(toTime.value.split(":")[1]);
+  let fromTimeMins = parseInt(fromTime.value.split(":")[1]);
+  let fromTimeHH = parseInt(fromTime.value.split(":")[0]);
+  let toTimeHH = parseInt(toTime.value.split(":")[0]);
+
+  const mins = (toTimeHH - fromTimeHH) * 60 + toTimeMins;
+  const y = (200 / 59) * ((fromTimeHH - 1) * 60 + fromTimeMins);
+  const height = (200 / 59) * mins - y;
+
+  const title = document.querySelector("#title-time");
+  const desc = document.querySelector("#desc-time");
+
+  tasks.push({
+    html: `<div class="event absolute w-[100px] h-[${height}px] top-[${y}px] left-[70px] p-3 rounded-lg bg-gray-200 w-full">${fromTime.value} - ${toTime.value} ${title.value}</div>
+      </div>`,
+  });
+
+  displayTasks();
+  dialog.close()
+}
+
+function displayTasks() {
+  document.querySelectorAll(".event").forEach((e) => e.remove());
+  tasks.forEach((t) => {
+    document.querySelector(".time-schedule").innerHTML += t.html;
+  });
 }
 
 function convertTo24HourFormat(timeString) {
