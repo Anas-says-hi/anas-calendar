@@ -6,6 +6,54 @@ let selectedDate = {
   month: MONTH,
   date: TODAY,
 };
+
+const colors = [
+  {
+    name: "red",
+    color: "#ffe4e6",
+    dark: "#e11d48",
+  },
+  {
+    name: "orange",
+    color: "#ffedd5",
+    dark: "#ea580c",
+  },
+  {
+    name: "yellow",
+    color: "#fef3c7",
+    dark: "#d97706",
+  },
+  {
+    name: "blue",
+    color: "#dbeafe",
+    dark: "#2563eb",
+  },
+  {
+    name: "cyan",
+    color: "#cffafe",
+    dark: "#0891b2",
+  },
+  {
+    name: "green",
+    color: "#d1fae5",
+    dark: "#059669",
+  },
+  {
+    name: "teal",
+    color: "#ccfbf1",
+    dark: "#0d9488",
+  },
+  {
+    name: "violet",
+    color: "#ede9fe",
+    dark: "#7c3aed",
+  },
+  {
+    name: "purple",
+    color: "#f3e8ff",
+    dark: "#9333ea",
+  },
+];
 const date = new Date(YEAR, MONTH, 0);
 const MONTHS = [
   "January",
@@ -30,6 +78,11 @@ const DAYS = [
   "Friday",
   "Saturday",
 ];
+
+let selectedColor = {
+  color: "#d1fae5",
+  dark: "#059669",
+};
 
 const monthElm = document.querySelector(".month");
 const daysElm = document.querySelector(".dates");
@@ -84,6 +137,30 @@ function showCal() {
   showDayOnHover();
   showSelectedDate();
   showTimeSchedule();
+  setDialogColors();
+}
+
+function setDialogColors() {
+  const colorsWrapper = document.querySelector(".dia-colors");
+  colors.forEach((color) => {
+    colorsWrapper.innerHTML += `<div id="${color.name}" style="background-color: ${color.color};outline: solid 2px ${color.dark};" class="COLOR h-[30px] aspect-square rounded-full hover:shadow-xl cursor-pointer"></div>`;
+  });
+  selectColors();
+}
+
+function selectColors() {
+  const COLORS = document.querySelectorAll(".COLOR");
+  COLORS.forEach((col) => {
+    col.addEventListener("click", () => {
+      colors.forEach((c) => {
+        if (c.name === col.id) {
+          console.log(c);
+          selectedColor.color = c.color;
+          selectedColor.dark = c.dark;
+        }
+      });
+    });
+  });
 }
 
 function showTimeSchedule() {
@@ -202,6 +279,7 @@ const tasks = [];
 const overflowHHs = [];
 
 function addModalFunctions(dialog, timeText, timeBlock) {
+  console.log("YE");
   dialog.showModal();
   const fromTime = document.querySelector("#from-time");
   const toTime = document.querySelector("#to-time");
@@ -304,6 +382,8 @@ function addTask() {
     description: desc.innerText,
     overflow: fromTimeHH,
     mod: false,
+    color: selectedColor.color,
+    dark: selectedColor.dark,
     id: "Item" + Math.floor(Math.random() * 100),
   });
 
@@ -315,14 +395,22 @@ function displayTasks() {
   document.querySelectorAll(".event").forEach((e) => e.remove());
   let currElm = null;
   tasks.forEach((t) => {
-    document.querySelector(
-      ".time-schedule"
-    ).innerHTML += `<div id="${t.id}" class="event m-[2px] trans overflow-auto absolute w-[100px] h-[${t.height - 2}px] top-[${t.ypos}px] left-[${t.left}px] p-3 rounded-lg bg-gray-200 w-full">${t.fromTime} - ${t.toTime} ${t.title}</div>
+    document.querySelector(".time-schedule").innerHTML += `<div id="${
+      t.id
+    }" style="background-color: ${t.color}; border-left:solid 5px ${
+      t.dark
+    }; color: ${
+      t.dark
+    }" class="event m-[2px] font-semibold trans overflow-auto absolute w-[100px] min-h-[50px] h-[${
+      t.height - 2
+    }px] top-[${t.ypos}px] left-[${t.left}px] p-3 rounded-lg w-full">${
+      t.fromTime
+    } - ${t.toTime} ${t.title}</div>
     </div>`;
     currElm = document.querySelector(`#${t.id}`);
   });
 
-  tasks[0].mod = true
+  tasks[0].mod = true;
 
   setInterval(() => {
     document.querySelectorAll(".event").forEach((e) => {
@@ -334,12 +422,12 @@ function displayTasks() {
         if (hasCollided(a, b)) {
           currElm.style.left = left + 101 + "px";
         } else {
-          tasks.forEach(t =>{
-            if(t.id === currElm.id && !t.mod){
-              t.left = left
-              t.mod = true
+          tasks.forEach((t) => {
+            if (t.id === currElm.id && !t.mod) {
+              t.left = left;
+              t.mod = true;
             }
-          })
+          });
         }
       }
     });

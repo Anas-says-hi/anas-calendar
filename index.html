@@ -122,7 +122,6 @@
       </div>
     </div>
     <dialog
-    
       id="addTask"
       class="absolute max-w-[500px] rounded-lg top-[50%] w-[60%] translate-y-[-50%] bg-white shadow-lg p-6"
     >
@@ -160,21 +159,28 @@
             id="to-time"
           />
         </div>
-        <label class="font-semibold">Title</label>
-        <input
-          class="bg-gray-100 p-1.5 px-3 rounded-lg border border-gray-300"
-          placeholder="Title"
-          type="text"
-          id="title-time"
-          value="Hello"
-        />
-        <label class="font-semibold">Description</label>
-        <textarea
-          class="bg-gray-100 resize-none rounded-lg h-[100px] py-1.5 px-3 border border-gray-300"
-          placeholder="Description"
-          id="desc-time"
-
-        ></textarea>
+        <label class="font-semibold">Color:</label>
+        <div class="dia-colors flex gap-2">
+        </div>
+          <div class="inp flex flex-col gap-2">
+            <label class="font-semibold">Title</label>
+            <input
+              class="bg-gray-100 p-1.5 px-3 rounded-lg border border-gray-300"
+              placeholder="Title"
+              type="text"
+              id="title-time"
+              value="Hello"
+            />
+          </div>
+          <div class="textarea flex flex-col gap-2">
+            <label class="font-semibold">Description</label>
+            <textarea
+              class="bg-gray-100 resize-none rounded-lg h-[100px] py-1.5 px-3 border border-gray-300"
+              placeholder="Description"
+              id="desc-time"
+    
+            ></textarea>
+          </div>
       </div>
       <div class="btns float-right">
         <button
