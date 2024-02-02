@@ -188,17 +188,18 @@ addEventBtn.addEventListener("click", () => {
 function addEvents() {
   const addEventBtns = document.querySelectorAll("#addEventBtn");
   addEventBtns.forEach((a) => {
-    // a.addEventListener("click", (e) => {
-    //   addModalFunctions(
-    //     addTaskModal,
-    //     e.target.parentElement.innerText,
-    //     e.target.parentElement.parentElement
-    //   );
-    // });
+    a.addEventListener("click", (e) => {
+      addModalFunctions(
+        dialog,
+        e.target.parentElement.innerText,
+        e.target.parentElement.parentElement
+      );
+    });
   });
 }
 
 const tasks = [];
+const overflowHHs = [];
 
 function addModalFunctions(dialog, timeText, timeBlock) {
   dialog.showModal();
@@ -274,7 +275,6 @@ subBtn.addEventListener("click", (e) => {
 });
 
 function addTask() {
-  console.log("clicked");
   const fromTime = document.querySelector("#from-time");
   const toTime = document.querySelector("#to-time");
   let toTimeMins = parseInt(toTime.value.split(":")[1]);
@@ -282,27 +282,77 @@ function addTask() {
   let fromTimeHH = parseInt(fromTime.value.split(":")[0]);
   let toTimeHH = parseInt(toTime.value.split(":")[0]);
 
-  const mins = (toTimeHH - fromTimeHH) * 60 + toTimeMins;
-  const y = (200 / 59) * ((fromTimeHH - 1) * 60 + fromTimeMins);
+  const mins = (toTimeHH - 1) * 59 + toTimeMins;
+  const y = (200 / 59) * ((fromTimeHH - 1) * 59 + fromTimeMins);
   const height = (200 / 59) * mins - y;
 
   const title = document.querySelector("#title-time");
   const desc = document.querySelector("#desc-time");
 
+  let hh = [];
+  for (let i = fromTimeHH; i <= toTimeHH; i++) {
+    hh.push(i);
+    overflowHHs.push(i);
+  }
   tasks.push({
-    html: `<div class="event absolute w-[100px] h-[${height}px] top-[${y}px] left-[70px] p-3 rounded-lg bg-gray-200 w-full">${fromTime.value} - ${toTime.value} ${title.value}</div>
-      </div>`,
+    left: 70,
+    height: height,
+    ypos: y,
+    fromTime: fromTime.value,
+    toTime: toTime.value,
+    title: title.value,
+    description: desc.innerText,
+    overflow: fromTimeHH,
+    mod: false,
+    id: "Item" + Math.floor(Math.random() * 100),
   });
 
   displayTasks();
-  dialog.close()
+  dialog.close();
 }
 
 function displayTasks() {
   document.querySelectorAll(".event").forEach((e) => e.remove());
+  let currElm = null;
   tasks.forEach((t) => {
-    document.querySelector(".time-schedule").innerHTML += t.html;
+    document.querySelector(
+      ".time-schedule"
+    ).innerHTML += `<div id="${t.id}" class="event m-[2px] trans overflow-auto absolute w-[100px] h-[${t.height - 2}px] top-[${t.ypos}px] left-[${t.left}px] p-3 rounded-lg bg-gray-200 w-full">${t.fromTime} - ${t.toTime} ${t.title}</div>
+    </div>`;
+    currElm = document.querySelector(`#${t.id}`);
   });
+
+  tasks[0].mod = true
+
+  setInterval(() => {
+    document.querySelectorAll(".event").forEach((e) => {
+      if (tasks.length > 1 && e != currElm) {
+        const b = e.getBoundingClientRect();
+        const a = currElm.getBoundingClientRect();
+        const style = window.getComputedStyle(currElm),
+          left = parseInt(style.getPropertyValue("left"));
+        if (hasCollided(a, b)) {
+          currElm.style.left = left + 101 + "px";
+        } else {
+          tasks.forEach(t =>{
+            if(t.id === currElm.id && !t.mod){
+              t.left = left
+              t.mod = true
+            }
+          })
+        }
+      }
+    });
+  });
+}
+
+function hasCollided(a, b) {
+  return !(
+    a.y + a.height < b.y ||
+    a.y > b.y + b.height ||
+    a.x + a.width < b.x ||
+    a.x > b.x + b.width
+  );
 }
 
 function convertTo24HourFormat(timeString) {
