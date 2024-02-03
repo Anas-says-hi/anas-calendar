@@ -169,7 +169,7 @@
               placeholder="Title"
               type="text"
               id="title-time"
-              value="Hello"
+              value="Task"
             />
           </div>
           <div class="textarea flex flex-col gap-2">
@@ -198,6 +198,11 @@
         </button>
       </div>
     </dialog>
+
+    <div class="event-menu hidden p-2 flex flex-col bg-black text-white rounded-xl absolute top-0">
+      <button class="px-8 hover:bg-zinc-700 py-1 rounded-lg">Edit</button>
+      <button id="deleteMenu" class="px-8 hover:bg-red-700 py-1 rounded-lg">Delete</button>
+    </div>
     <script src="./app.js"></script>
   </body>
 </html>

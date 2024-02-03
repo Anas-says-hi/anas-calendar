@@ -243,20 +243,17 @@ function addModalFunctions(dialog, timeText) {
     toTime.value = maxTime;
   }
 
-  let fromMins = parseInt(fromTime.value.split(":")[1]);
-  let fromHH = parseInt(fromTime.value.split(":")[0]);
-  let toMins = parseInt(toTime.value.split(":")[1]);
-  let toHH = parseInt(toTime.value.split(":")[0]);
-
   fromTime.addEventListener("input", (e) => {
-    fromMins = parseInt(fromTime.value.split(":")[1]);
-    fromHH = parseInt(fromTime.value.split(":")[0]);
-
     if (toHH < fromHH) {
       toTime.value = fromTime.value;
     }
   });
-
+  
+  toTime.addEventListener("input", (e) => {
+    if (toHH < fromHH) {
+      toTime.value = fromTime.value;
+    }
+  });
   setInterval(() => {
     const mins1 =
       parseInt(fromTime.value.split(":")[0]) * 60 +
@@ -265,20 +262,12 @@ function addModalFunctions(dialog, timeText) {
       parseInt(toTime.value.split(":")[0]) * 60 +
       parseInt(toTime.value.split(":")[1]);
     if (mins1 > mins2) {
-      const hours = toTime.value.split(":")[0];
       toTime.value = `${
         toTime.value.split(":")[0] + ":" + fromTime.value.split(":")[1]
       }`;
     }
   });
 
-  toTime.addEventListener("input", (e) => {
-    toMins = parseInt(fromTime.value.split(":")[1]);
-    toHH = parseInt(toTime.value.split(":")[0]);
-    if (toHH < fromHH) {
-      toTime.value = fromTime.value;
-    }
-  });
 }
 
 const subBtn = document.querySelector("#submit");
@@ -315,7 +304,7 @@ function addTask() {
         mod: false,
         color: selectedColor.color,
         dark: selectedColor.dark,
-        id: "Item" + Math.floor(Math.random() * 100),
+        id: "Item" + crypto.randomUUID(),
       });
     }
   });
@@ -376,9 +365,9 @@ function displayTasks() {
     }
   });
 
-  localStorage.setItem("EVENTS", JSON.stringify(EVENTS))
-
+  localStorage.setItem("EVENTS", JSON.stringify(EVENTS));
   addEvents();
+  eventOptions()
 }
 
 function hasCollided(a, b) {
@@ -428,7 +417,7 @@ function showSelectedDate() {
   selectedDateString = selectedDateText.innerText;
 
   EVENTS.forEach((e) => {
-    if (!e.events) {
+    if (e.events.length === 0) {
       EVENTS = EVENTS.filter((f) => f != e);
     }
   });
@@ -521,4 +510,47 @@ function selectDates() {
 
 function setMonthYear() {
   monthElm.innerHTML = MONTHS[MONTH - 1] + " " + YEAR;
+}
+
+function eventOptions() {
+  document.querySelectorAll(".event").forEach((ev) => {
+    ev.addEventListener("contextmenu", (e) => {
+      console.log(ev)
+      e.preventDefault();
+      const eventMenu = document.querySelector(".event-menu");
+
+      eventMenu.classList.toggle("hidden");
+      eventMenu.style.left = e.clientX + "px";
+      eventMenu.style.top = e.clientY + "px";
+
+      const delEv = document.querySelector("#deleteMenu");
+
+      delEv.addEventListener("click", () => {
+        EVENTS.forEach((f) => {
+          f.events.forEach(a =>{
+            if (a.id === ev.id) {
+              deleteEvent(a)
+            }
+          })
+        });
+      });
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.contains(document.querySelector(".event-menu"))) {
+      const eventMenu = document.querySelector(".event-menu");
+
+      eventMenu.classList.add("hidden");
+    }
+  });
+}
+
+function deleteEvent(event) {
+  EVENTS.forEach(ev =>{
+    if(ev.name === selectedDateString){
+      ev.events = ev.events.filter((f) => f != event)
+    }
+  })
+  displayTasks();
 }
