@@ -6,6 +6,10 @@ A calendar app similar to google calendar made with JavaScript.
 
 It's the most secure calendar app since there's no sign up or login.
 
-## Version 1.0.0
-+ Calendar
-+ Events adding
+## Version 0.9.0
++ Calendar with basic functions
++ Events panel
++ Adding Events
++ Deleting Events
++ Editing Events
++ Saving Events

@@ -248,7 +248,7 @@ function addModalFunctions(dialog, timeText) {
       toTime.value = fromTime.value;
     }
   });
-  
+
   toTime.addEventListener("input", (e) => {
     if (toHH < fromHH) {
       toTime.value = fromTime.value;
@@ -267,7 +267,6 @@ function addModalFunctions(dialog, timeText) {
       }`;
     }
   });
-
 }
 
 const subBtn = document.querySelector("#submit");
@@ -367,7 +366,7 @@ function displayTasks() {
 
   localStorage.setItem("EVENTS", JSON.stringify(EVENTS));
   addEvents();
-  eventOptions()
+  eventOptions();
 }
 
 function hasCollided(a, b) {
@@ -515,7 +514,7 @@ function setMonthYear() {
 function eventOptions() {
   document.querySelectorAll(".event").forEach((ev) => {
     ev.addEventListener("contextmenu", (e) => {
-      console.log(ev)
+      console.log(ev);
       e.preventDefault();
       const eventMenu = document.querySelector(".event-menu");
 
@@ -524,19 +523,30 @@ function eventOptions() {
       eventMenu.style.top = e.clientY + "px";
 
       const delEv = document.querySelector("#deleteMenu");
+      const editEv = document.querySelector("#editMenu");
 
       delEv.addEventListener("click", () => {
         EVENTS.forEach((f) => {
-          f.events.forEach(a =>{
+          f.events.forEach((a) => {
             if (a.id === ev.id) {
-              deleteEvent(a)
+              deleteEvent(a);
             }
-          })
+          });
+        });
+      });
+      editEv.addEventListener("click", () => {
+        EVENTS.forEach((f) => {
+          f.events.forEach((a) => {
+            if (a.id === ev.id) {
+              const edit = prompt("Edit:")
+              editEvent(a, edit);
+            }
+          });
         });
       });
     });
   });
-
+  
   document.addEventListener("click", (e) => {
     if (!e.target.contains(document.querySelector(".event-menu"))) {
       const eventMenu = document.querySelector(".event-menu");
@@ -546,11 +556,24 @@ function eventOptions() {
   });
 }
 
-function deleteEvent(event) {
-  EVENTS.forEach(ev =>{
-    if(ev.name === selectedDateString){
-      ev.events = ev.events.filter((f) => f != event)
+function editEvent(evnt, edited) {
+  EVENTS.forEach((ev) => {
+    if (ev.name === selectedDateString) {
+      ev.events.forEach(f =>{
+        if(f === evnt){
+          f.title = edited
+        }
+      })
     }
-  })
+  });
+  displayTasks();
+}
+
+function deleteEvent(event) {
+  EVENTS.forEach((ev) => {
+    if (ev.name === selectedDateString) {
+      ev.events = ev.events.filter((f) => f != event);
+    }
+  });
   displayTasks();
 }
