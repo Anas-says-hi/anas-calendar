@@ -1,11 +1,17 @@
 let YEAR = new Date().getFullYear();
 let MONTH = new Date().getMonth() + 1;
 const TODAY = new Date().getDate();
+
 let selectedDate = {
   year: YEAR,
   month: MONTH,
   date: TODAY,
 };
+
+let EVENTS = JSON.parse(localStorage.getItem("EVENTS")) || [];
+let tasks = [];
+
+let selectedDateString = "";
 
 const colors = [
   {
@@ -143,7 +149,7 @@ function showCal() {
 function setDialogColors() {
   const colorsWrapper = document.querySelector(".dia-colors");
   colors.forEach((color) => {
-    colorsWrapper.innerHTML += `<div id="${color.name}" style="background-color: ${color.color};outline: solid 2px ${color.dark};" class="COLOR h-[30px] aspect-square rounded-full hover:shadow-xl cursor-pointer"></div>`;
+    colorsWrapper.innerHTML += `<div id="${color.name}" style="background-color: ${color.color};border: solid 2px ${color.dark};" class="COLOR h-[30px] aspect-square rounded-full hover:shadow-xl cursor-pointer"></div>`;
   });
   selectColors();
 }
@@ -152,9 +158,10 @@ function selectColors() {
   const COLORS = document.querySelectorAll(".COLOR");
   COLORS.forEach((col) => {
     col.addEventListener("click", () => {
+      COLORS.forEach((c) => c.classList.remove("active"));
+      col.classList.add("active");
       colors.forEach((c) => {
         if (c.name === col.id) {
-          console.log(c);
           selectedColor.color = c.color;
           selectedColor.dark = c.dark;
         }
@@ -165,101 +172,40 @@ function selectColors() {
 
 function showTimeSchedule() {
   const timeSchedule = document.querySelector(".time-schedule");
-  for (let i = 1; i <= 12; i++) {
-    if (i < 12) {
-      timeSchedule.innerHTML += `<div class="time-block h-[200px] border-b flex gap-3">
-      <div class="time p-3">
-        <p class="time-info">${i} AM</p>
-        <button id="addEventBtn" class="text-emerald-600 hover:bg-gray-100 rounded-full p-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1.7em"
-            height="1.7em"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="currentColor"
-              d="M11 13H6q-.425 0-.712-.288T5 12q0-.425.288-.712T6 11h5V6q0-.425.288-.712T12 5q.425 0 .713.288T13 6v5h5q.425 0 .713.288T19 12q0 .425-.288.713T18 13h-5v5q0 .425-.288.713T12 19q-.425 0-.712-.288T11 18z"
-            />
-          </svg>
-        </button>
-      </div>
-      <div class="events relative grow"></div>
-    </div>`;
-    } else {
-      timeSchedule.innerHTML += `<div class="time-block h-[200px] border-b flex gap-3">
-  <div class="time p-3">
-    <p class="time-info">${i} PM</p>
-    <button id="addEventBtn" class="text-emerald-600 hover:bg-gray-100 rounded-full p-1">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="1.7em"
-        height="1.7em"
-        viewBox="0 0 24 24"
-      >
-        <path
-          fill="currentColor"
-          d="M11 13H6q-.425 0-.712-.288T5 12q0-.425.288-.712T6 11h5V6q0-.425.288-.712T12 5q.425 0 .713.288T13 6v5h5q.425 0 .713.288T19 12q0 .425-.288.713T18 13h-5v5q0 .425-.288.713T12 19q-.425 0-.712-.288T11 18z"
-        />
-      </svg>
-    </button>
-  </div>
-  <div class="events relative grow"></div>
-</div>`;
-    }
-  }
-  for (let i = 1; i <= 12; i++) {
-    if (i < 12) {
-      timeSchedule.innerHTML += `<div class="time-block h-[200px] border-b flex gap-3">
-      <div class="time p-3">
-        <p class="time-info">${i} PM</p>
-        <button id="addEventBtn" class="text-emerald-600 hover:bg-gray-100 rounded-full p-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="1.7em"
-            height="1.7em"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fill="currentColor"
-              d="M11 13H6q-.425 0-.712-.288T5 12q0-.425.288-.712T6 11h5V6q0-.425.288-.712T12 5q.425 0 .713.288T13 6v5h5q.425 0 .713.288T19 12q0 .425-.288.713T18 13h-5v5q0 .425-.288.713T12 19q-.425 0-.712-.288T11 18z"
-            />
-          </svg>
-        </button>
-      </div>
-      <div class="events relative grow"></div>
-    </div>`;
-    } else {
-      timeSchedule.innerHTML += `<div class="time-block h-[200px] border-b flex gap-3">
-  <div class="time p-3">
-    <p class="time-info">${i} AM</p>
-    <button id="addEventBtn" class="text-emerald-600 hover:bg-gray-100 rounded-full p-1">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="1.7em"
-        height="1.7em"
-        viewBox="0 0 24 24"
-      >
-        <path
-          fill="currentColor"
-          d="M11 13H6q-.425 0-.712-.288T5 12q0-.425.288-.712T6 11h5V6q0-.425.288-.712T12 5q.425 0 .713.288T13 6v5h5q.425 0 .713.288T19 12q0 .425-.288.713T18 13h-5v5q0 .425-.288.713T12 19q-.425 0-.712-.288T11 18z"
-        />
-      </svg>
-    </button>
-  </div>
-  <div class="events relative grow"></div>
-</div>`;
-    }
+  timeSchedule.innerHTML = "";
+  for (let i = 1; i <= 24; i++) {
+    timeSchedule.innerHTML += `<div class="time-block h-[200px] border-b flex gap-3">
+    <div class="time p-3">
+      <p class="time-info">${i > 12 ? i - 12 : i} ${
+      i < 12 ? "AM" : i === 24 ? "AM" : "PM"
+    }</p>
+      <button id="addEventBtn" class="text-emerald-600 hover:bg-gray-100 rounded-full p-1">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="1.7em"
+          height="1.7em"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill="currentColor"
+            d="M11 13H6q-.425 0-.712-.288T5 12q0-.425.288-.712T6 11h5V6q0-.425.288-.712T12 5q.425 0 .713.288T13 6v5h5q.425 0 .713.288T19 12q0 .425-.288.713T18 13h-5v5q0 .425-.288.713T12 19q-.425 0-.712-.288T11 18z"
+          />
+        </svg>
+      </button>
+    </div>
+    <div class="events relative grow"></div>
+  </div>`;
   }
 
   addEvents();
+  displayTasks();
 }
 
-const addEventBtn = document.querySelector("#addEventBtn");
+const addEventBtn = document.querySelector("#addGlobalEventBtn");
 const dialog = document.querySelector("#addTask");
 
 addEventBtn.addEventListener("click", () => {
-  addModalFunctions(dialog, null, null);
+  addModalFunctions(dialog, null);
 });
 
 function addEvents() {
@@ -268,35 +214,33 @@ function addEvents() {
     a.addEventListener("click", (e) => {
       addModalFunctions(
         dialog,
-        e.target.parentElement.innerText,
+        e.target.parentElement.parentElement.innerText,
         e.target.parentElement.parentElement
       );
     });
   });
 }
 
-const tasks = [];
+const currTasks = [];
 const overflowHHs = [];
 
-function addModalFunctions(dialog, timeText, timeBlock) {
-  console.log("YE");
+function addModalFunctions(dialog, timeText) {
   dialog.showModal();
   const fromTime = document.querySelector("#from-time");
   const toTime = document.querySelector("#to-time");
 
-  const minTime = timeText ? convertTo24HourFormat(timeText) + ":00" : "";
-  const maxTime = timeText ? convertTo24HourFormat(timeText) + ":59" : "";
+  fromTime.value = "01:00";
+  toTime.value = "01:59";
 
   if (timeText) {
+    const minTime = convertTo24HourFormat(timeText) + ":00";
+    const maxTime = convertTo24HourFormat(timeText) + ":59";
     fromTime.setAttribute("min", minTime);
     fromTime.setAttribute("max", maxTime);
     toTime.setAttribute("min", minTime);
     toTime.setAttribute("max", maxTime);
     fromTime.value = minTime;
     toTime.value = maxTime;
-  } else {
-    fromTime.value = "01:00";
-    toTime.value = "01:59";
   }
 
   let fromMins = parseInt(fromTime.value.split(":")[1]);
@@ -304,18 +248,9 @@ function addModalFunctions(dialog, timeText, timeBlock) {
   let toMins = parseInt(toTime.value.split(":")[1]);
   let toHH = parseInt(toTime.value.split(":")[0]);
 
-  let fromTimeID =
-    parseInt(fromTime.value) > 12
-      ? parseInt(fromTime.value) - 12 + " PM"
-      : parseInt(fromTime.value) + " AM";
-
   fromTime.addEventListener("input", (e) => {
     fromMins = parseInt(fromTime.value.split(":")[1]);
     fromHH = parseInt(fromTime.value.split(":")[0]);
-    fromTimeID =
-      parseInt(fromTime.value) > 12
-        ? parseInt(fromTime.value) - 12 + " PM"
-        : parseInt(fromTime.value) + " AM";
 
     if (toHH < fromHH) {
       toTime.value = fromTime.value;
@@ -332,7 +267,7 @@ function addModalFunctions(dialog, timeText, timeBlock) {
     if (mins1 > mins2) {
       const hours = toTime.value.split(":")[0];
       toTime.value = `${
-        toTime.value.split(":")[0] + ":" + addLeadingZero(fromMins.toString())
+        toTime.value.split(":")[0] + ":" + fromTime.value.split(":")[1]
       }`;
     }
   });
@@ -367,24 +302,22 @@ function addTask() {
   const title = document.querySelector("#title-time");
   const desc = document.querySelector("#desc-time");
 
-  let hh = [];
-  for (let i = fromTimeHH; i <= toTimeHH; i++) {
-    hh.push(i);
-    overflowHHs.push(i);
-  }
-  tasks.push({
-    left: 70,
-    height: height,
-    ypos: y,
-    fromTime: fromTime.value,
-    toTime: toTime.value,
-    title: title.value,
-    description: desc.innerText,
-    overflow: fromTimeHH,
-    mod: false,
-    color: selectedColor.color,
-    dark: selectedColor.dark,
-    id: "Item" + Math.floor(Math.random() * 100),
+  EVENTS.forEach((e) => {
+    if (e.name === selectedDateString) {
+      e.events.push({
+        left: 70,
+        height: height,
+        ypos: y,
+        fromTime: fromTime.value,
+        toTime: toTime.value,
+        title: title.value,
+        description: desc.innerText,
+        mod: false,
+        color: selectedColor.color,
+        dark: selectedColor.dark,
+        id: "Item" + Math.floor(Math.random() * 100),
+      });
+    }
   });
 
   displayTasks();
@@ -394,44 +327,58 @@ function addTask() {
 function displayTasks() {
   document.querySelectorAll(".event").forEach((e) => e.remove());
   let currElm = null;
-  tasks.forEach((t) => {
-    document.querySelector(".time-schedule").innerHTML += `<div id="${
-      t.id
-    }" style="background-color: ${t.color}; border-left:solid 5px ${
-      t.dark
-    }; color: ${
-      t.dark
-    }" class="event m-[2px] font-semibold trans overflow-auto absolute w-[100px] min-h-[50px] h-[${
-      t.height - 2
-    }px] top-[${t.ypos}px] left-[${t.left}px] p-3 rounded-lg w-full">${
-      t.fromTime
-    } - ${t.toTime} ${t.title}</div>
-    </div>`;
-    currElm = document.querySelector(`#${t.id}`);
-  });
 
-  tasks[0].mod = true;
+  EVENTS.forEach((e) => {
+    if (e.name === selectedDateString && e.events.length != 0) {
+      e.events.forEach((t) => {
+        document.querySelector(".time-schedule").innerHTML += `<div id="${
+          t.id
+        }" style="background-color: ${t.color}; border-left:solid 5px ${
+          t.dark
+        }; color: ${
+          t.dark
+        }" class="event m-[2px] font-semibold trans overflow-auto absolute w-[100px] min-h-[50px] h-[${
+          t.height - 2
+        }px] top-[${t.ypos}px] left-[${t.left}px] p-3 rounded-lg w-full">${
+          t.fromTime
+        } - ${t.toTime} ${t.title}</div>
+        </div>`;
+        currElm = document.querySelector(`#${t.id}`);
+      });
+      e.events[0].mod = true;
+    }
+  });
 
   setInterval(() => {
-    document.querySelectorAll(".event").forEach((e) => {
-      if (tasks.length > 1 && e != currElm) {
-        const b = e.getBoundingClientRect();
-        const a = currElm.getBoundingClientRect();
-        const style = window.getComputedStyle(currElm),
-          left = parseInt(style.getPropertyValue("left"));
-        if (hasCollided(a, b)) {
-          currElm.style.left = left + 101 + "px";
-        } else {
-          tasks.forEach((t) => {
-            if (t.id === currElm.id && !t.mod) {
-              t.left = left;
-              t.mod = true;
+    if (currElm) {
+      document.querySelectorAll(".event").forEach((e) => {
+        EVENTS.forEach((f) => {
+          if (f.name === selectedDateString) {
+            if (f.events.length > 1 && e != currElm) {
+              const b = e.getBoundingClientRect();
+              const a = currElm.getBoundingClientRect();
+              const style = window.getComputedStyle(currElm),
+                left = parseInt(style.getPropertyValue("left"));
+              if (hasCollided(a, b)) {
+                currElm.style.left = left + 101 + "px";
+              } else {
+                f.events.forEach((t) => {
+                  if (t.id === currElm.id && !t.mod) {
+                    t.left = left;
+                    t.mod = true;
+                  }
+                });
+              }
             }
-          });
-        }
-      }
-    });
+          }
+        });
+      });
+    }
   });
+
+  localStorage.setItem("EVENTS", JSON.stringify(EVENTS))
+
+  addEvents();
 }
 
 function hasCollided(a, b) {
@@ -477,6 +424,30 @@ function showSelectedDate() {
         selectedDate.date
       ).getDay()
     ];
+
+  selectedDateString = selectedDateText.innerText;
+
+  EVENTS.forEach((e) => {
+    if (!e.events) {
+      EVENTS = EVENTS.filter((f) => f != e);
+    }
+  });
+
+  if (EVENTS.length === 0) {
+    EVENTS.push({
+      name: selectedDateString,
+      events: [],
+    });
+  } else {
+    EVENTS.forEach((e) => {
+      if (e.name !== selectedDateString) {
+        EVENTS.push({
+          name: selectedDateString,
+          events: [],
+        });
+      }
+    });
+  }
 }
 
 function showDayOnHover() {
@@ -502,6 +473,7 @@ function setCurrDate() {
       currMONTH === MONTH &&
       currYEAR === YEAR
     ) {
+      selectedDate.date = parseInt(d.innerText);
       d.id = "today";
       d.classList.remove("hover:bg-gray-200");
       d.classList.add("text-white");
@@ -525,13 +497,23 @@ function selectDates() {
         }
       });
       if (d.id != "today") {
-        (selectedDate.year = YEAR), (selectedDate.month = MONTH);
         selectedDate.date = parseInt(d.innerText);
+
+        (selectedDate.year = YEAR), (selectedDate.month = MONTH);
         showSelectedDate();
+        showTimeSchedule();
         d.classList.remove("hover:bg-gray-200");
         d.classList.toggle("text-white");
         d.classList.toggle("bg-emerald-500");
         d.classList.toggle("hover:bg-emerald-600");
+      } else {
+        selectedDate = {
+          year: YEAR,
+          month: MONTH,
+          date: TODAY,
+        };
+        showSelectedDate();
+        showTimeSchedule();
       }
     });
   });
