@@ -20,3 +20,7 @@ dialog::backdrop {
 .active{
   outline: solid 3px black;
 }
+
+.event::-webkit-scrollbar{
+  display: none;
+}

@@ -511,6 +511,8 @@ function setMonthYear() {
   monthElm.innerHTML = MONTHS[MONTH - 1] + " " + YEAR;
 }
 
+let currEvID = null
+
 function eventOptions() {
   document.querySelectorAll(".event").forEach((ev) => {
     ev.addEventListener("contextmenu", (e) => {
@@ -522,39 +524,42 @@ function eventOptions() {
       eventMenu.style.left = e.clientX + "px";
       eventMenu.style.top = e.clientY + "px";
 
-      const delEv = document.querySelector("#deleteMenu");
-      const editEv = document.querySelector("#editMenu");
+      currEvID = ev.id
 
-      delEv.addEventListener("click", () => {
-        EVENTS.forEach((f) => {
-          f.events.forEach((a) => {
-            if (a.id === ev.id) {
-              deleteEvent(a);
-            }
-          });
-        });
-      });
-      editEv.addEventListener("click", () => {
-        EVENTS.forEach((f) => {
-          f.events.forEach((a) => {
-            if (a.id === ev.id) {
-              const edit = prompt("Edit:")
-              editEvent(a, edit);
-            }
-          });
-        });
-      });
     });
   });
+  
   
   document.addEventListener("click", (e) => {
     if (!e.target.contains(document.querySelector(".event-menu"))) {
       const eventMenu = document.querySelector(".event-menu");
-
+      
       eventMenu.classList.add("hidden");
     }
   });
 }
+const delEv = document.querySelector("#deleteMenu");
+const editEv = document.querySelector("#editMenu");
+
+delEv.addEventListener("click", () => {
+  EVENTS.forEach((f) => {
+    f.events.forEach((a) => {
+      if (a.id === currEvID) {
+        deleteEvent(a);
+      }
+    });
+  });
+});
+editEv.addEventListener("click", () => {
+  EVENTS.forEach((f) => {
+    f.events.forEach((a) => {
+      if (a.id === currEvID) {
+        const edit = prompt("Edit:")
+        editEvent(a, edit);
+      }
+    });
+  });
+});
 
 function editEvent(evnt, edited) {
   EVENTS.forEach((ev) => {
