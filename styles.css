@@ -24,3 +24,12 @@ dialog::backdrop {
 .event::-webkit-scrollbar{
   display: none;
 }
+
+#panel-desc{
+  background-color: #f4f4f5;
+  padding: .5em;
+  border-radius: .5em;
+}
+#panel-desc:empty{
+  background-color: transparent;
+}

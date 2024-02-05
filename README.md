@@ -14,3 +14,8 @@ It's the most secure calendar app since there's no sign up or login.
 + Deleting Events
 + Editing Events
 + Saving Events
+
+## Todo:
+
++ Responsize
++ Shortcut keys

@@ -243,17 +243,30 @@ function addModalFunctions(dialog, timeText) {
     toTime.value = maxTime;
   }
 
+  let fromMins = parseInt(fromTime.value.split(":")[1]);
+  let fromHH = parseInt(fromTime.value.split(":")[0]);
+  let toMins = parseInt(toTime.value.split(":")[1]);
+  let toHH = parseInt(toTime.value.split(":")[0]);
+
+
   fromTime.addEventListener("input", (e) => {
+    fromMins = parseInt(fromTime.value.split(":")[1]);
+    fromHH = parseInt(fromTime.value.split(":")[0]);;
+
     if (toHH < fromHH) {
       toTime.value = fromTime.value;
     }
   });
 
+
   toTime.addEventListener("input", (e) => {
+    toMins = parseInt(fromTime.value.split(":")[1]);
+    toHH = parseInt(toTime.value.split(":")[0]);
     if (toHH < fromHH) {
       toTime.value = fromTime.value;
     }
   });
+
   setInterval(() => {
     const mins1 =
       parseInt(fromTime.value.split(":")[0]) * 60 +
@@ -299,7 +312,7 @@ function addTask() {
         fromTime: fromTime.value,
         toTime: toTime.value,
         title: title.value,
-        description: desc.innerText,
+        description: desc.value,
         mod: false,
         color: selectedColor.color,
         dark: selectedColor.dark,
@@ -321,11 +334,11 @@ function displayTasks() {
       e.events.forEach((t) => {
         document.querySelector(".time-schedule").innerHTML += `<div id="${
           t.id
-        }" style="background-color: ${t.color}; border-left:solid 5px ${
+        }" style="background-color: ${t.color}; border-left:solid 6px ${
           t.dark
         }; color: ${
           t.dark
-        }" class="event m-[2px] font-semibold trans overflow-auto absolute w-[100px] min-h-[50px] h-[${
+        }" class="event m-[2px] font-semibold trans overflow-auto absolute w-[150px] min-h-[50px] h-[${
           t.height - 2
         }px] top-[${t.ypos}px] left-[${t.left}px] p-3 rounded-lg w-full">${
           t.fromTime
@@ -348,7 +361,7 @@ function displayTasks() {
               const style = window.getComputedStyle(currElm),
                 left = parseInt(style.getPropertyValue("left"));
               if (hasCollided(a, b)) {
-                currElm.style.left = left + 101 + "px";
+                currElm.style.left = left + 151 + "px";
               } else {
                 f.events.forEach((t) => {
                   if (t.id === currElm.id && !t.mod) {
@@ -367,6 +380,7 @@ function displayTasks() {
   localStorage.setItem("EVENTS", JSON.stringify(EVENTS));
   addEvents();
   eventOptions();
+  showInfo()
 }
 
 function hasCollided(a, b) {
@@ -516,7 +530,6 @@ let currEvID = null
 function eventOptions() {
   document.querySelectorAll(".event").forEach((ev) => {
     ev.addEventListener("contextmenu", (e) => {
-      console.log(ev);
       e.preventDefault();
       const eventMenu = document.querySelector(".event-menu");
 
@@ -527,6 +540,7 @@ function eventOptions() {
       currEvID = ev.id
 
     });
+
   });
   
   
@@ -538,6 +552,28 @@ function eventOptions() {
     }
   });
 }
+
+function showInfo(){
+  document.querySelectorAll(".event").forEach((ev)=>{
+    ev.addEventListener("click", ()=>{
+
+      currEvID = ev.id
+
+      EVENTS.forEach((f) => {
+        f.events.forEach((a) => {
+          if (a.id === currEvID) {
+            document.querySelector("#panel-time").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M5 22q-.825 0-1.412-.587T3 20V6q0-.825.588-1.412T5 4h1V2h2v2h8V2h2v2h1q.825 0 1.413.588T21 6v4.675q0 .425-.288.713t-.712.287q-.425 0-.712-.288T19 10.676V10H5v10h5.8q.425 0 .713.288T11.8 21q0 .425-.288.713T10.8 22zm13 1q-2.075 0-3.537-1.463T13 18q0-2.075 1.463-3.537T18 13q2.075 0 3.538 1.463T23 18q0 2.075-1.463 3.538T18 23m1.675-2.625l.7-.7L18.5 17.8V15h-1v3.2z"/></svg> from ${a.fromTime} to ${a.toTime}`
+            document.querySelector(".panel").classList.toggle("hidden")
+            document.getElementById("panel-task").innerText = a.title
+            document.getElementById("panel-desc").innerText = a.description
+          }
+        });
+      });
+    })
+    
+  })
+}
+
 const delEv = document.querySelector("#deleteMenu");
 const editEv = document.querySelector("#editMenu");
 

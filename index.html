@@ -4,13 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css" />
-    <link rel="shortcut icon" href="./assets/icons/icon.svg" type="image/x-icon">
+    <link
+      rel="shortcut icon"
+      href="./assets/icons/icon.svg"
+      type="image/x-icon"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Anas Calendar</title>
   </head>
   <body class="h-screen overflow-hidden">
     <nav class="p-3 border-b">
-      <p class="text-2xl flex gap-2 items-center"><img src="./assets/icons/icon.svg" alt="Anas Calendar" class="h-[30px]" srcset="">Anas Calendar</p>
+      <p class="text-2xl flex gap-2 items-center">
+        <img
+          src="./assets/icons/icon.svg"
+          alt="Anas Calendar"
+          class="h-[30px]"
+          srcset=""
+        />Anas Calendar
+      </p>
     </nav>
     <div class="container flex min-w-full min-h-full">
       <div class="calendar max-w-[258px] m-3">
@@ -99,7 +110,7 @@
             <p class="selected-day"></p>
           </div>
           <button
-          id="addGlobalEventBtn"
+            id="addGlobalEventBtn"
             class="bg-white hover:bg-emerald-50 gap-2 text-emerald-600 px-4 py-2 font-semibold rounded-full flex items-center"
           >
             <svg
@@ -116,9 +127,7 @@
             Add Event
           </button>
         </div>
-        <div class="time-schedule relative overflow-auto h-[583px]">
-
-        </div>
+        <div class="time-schedule relative overflow-auto h-[583px]"></div>
       </div>
     </div>
     <dialog
@@ -160,31 +169,29 @@
           />
         </div>
         <label class="font-semibold">Color:</label>
-        <div class="dia-colors flex gap-2">
+        <div class="dia-colors flex gap-2"></div>
+        <div class="inp flex flex-col gap-2">
+          <label class="font-semibold">Title</label>
+          <input
+            class="bg-gray-100 p-1.5 px-3 rounded-lg border border-gray-300"
+            placeholder="Title"
+            type="text"
+            id="title-time"
+            value="Task"
+          />
         </div>
-          <div class="inp flex flex-col gap-2">
-            <label class="font-semibold">Title</label>
-            <input
-              class="bg-gray-100 p-1.5 px-3 rounded-lg border border-gray-300"
-              placeholder="Title"
-              type="text"
-              id="title-time"
-              value="Task"
-            />
-          </div>
-          <div class="textarea flex flex-col gap-2">
-            <label class="font-semibold">Description</label>
-            <textarea
-              class="bg-gray-100 resize-none rounded-lg h-[100px] py-1.5 px-3 border border-gray-300"
-              placeholder="Description"
-              id="desc-time"
-    
-            ></textarea>
-          </div>
+        <div class="textarea flex flex-col gap-2">
+          <label class="font-semibold">Description</label>
+          <textarea
+            class="bg-gray-100 resize-none rounded-lg h-[100px] py-1.5 px-3 border border-gray-300"
+            placeholder="Description"
+            id="desc-time"
+          ></textarea>
+        </div>
       </div>
       <div class="btns float-right">
         <button
-        id="dia-cancel"
+          id="dia-cancel"
           onclick="this.parentElement.parentElement.close()"
           class="mt-2 px-3 py-2 rounded-lg hover:bg-gray-200 mr-2"
         >
@@ -199,9 +206,38 @@
       </div>
     </dialog>
 
-    <div class="event-menu hidden p-2 flex flex-col bg-black text-white rounded-xl absolute top-0">
-      <button id="editMenu" class="px-8 hover:bg-zinc-700 py-1 rounded-lg">Edit</button>
-      <button id="deleteMenu" class="px-8 hover:bg-red-700 py-1 rounded-lg">Delete</button>
+    <div
+      class="event-menu hidden p-2 flex flex-col bg-black text-white rounded-xl absolute top-0"
+    >
+      <button id="editMenu" class="px-8 hover:bg-zinc-700 py-1 rounded-lg">
+        Edit
+      </button>
+      <button id="deleteMenu" class="px-8 hover:bg-red-700 py-1 rounded-lg">
+        Delete
+      </button>
+    </div>
+    <div
+      class="panel w-[250px] p-4 hidden absolute right-0 top-0 h-full bg-white shadow-[35px_0_60px_10px_rgba(0,0,0,0.3)]"
+    >
+      <div class="flex pb-3 font-semibold justify-between items-center">
+        <h2 class="text-2xl text-emerald-600">Event</h2>
+        <button class="text-gray-600" onclick="this.parentElement.parentElement.classList.add('hidden')">
+          <svg
+            xmlns="http:www.w3.org/2000/svg"
+            width="2em"
+            height="2em"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill="currentColor"
+              d="m12 13.4l-4.9 4.9q-.275.275-.7.275t-.7-.275q-.275-.275-.275-.7t.275-.7l4.9-4.9l-4.9-4.9q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l4.9 4.9l4.9-4.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7L13.4 12l4.9 4.9q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275z"
+            />
+          </svg>
+        </button>
+      </div>
+      <p id="panel-time" class="flex font-semibold gap-2 text-zinc-500 items-center"></p>
+      <p id="panel-task" class="text-xl py-3 text-emerald-600 font-bold">Eating</p>
+      <p id="panel-desc"></p>
     </div>
     <script src="./app.js"></script>
   </body>
