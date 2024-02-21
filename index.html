@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,10 +10,15 @@
       type="image/x-icon"
     />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+      };
+    </script>
     <title>Anas Calendar</title>
   </head>
-  <body class="h-screen overflow-hidden">
-    <nav class="p-3 border-b">
+  <body class="h-screen dark:bg-gray-900 dark:text-gray-200 overflow-hidden">
+    <nav class="p-3 border-b dark:border-zinc-700">
       <p class="text-2xl flex gap-2 items-center">
         <img
           src="./assets/icons/icon.svg"
@@ -31,7 +36,7 @@
           ></div>
           <div class="btns text-gray-700 flex gap-3">
             <button
-              class="bg-gray-200 back-btn w-[30px] h-[30px] hover:bg-gray-300 flex justify-center items-center rounded-full"
+              class="bg-gray-200 dark:bg-gray-800 dark:text-gray-300 back-btn w-[30px] h-[30px] hover:bg-gray-300 dark:hover:bg-gray-700 flex justify-center items-center rounded-full"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +51,7 @@
               </svg>
             </button>
             <button
-              class="bg-gray-200 ford-btn w-[30px] h-[30px] hover:bg-gray-300 flex justify-center items-center rounded-full"
+              class="bg-gray-200 dark:bg-gray-800 dark:text-gray-300 ford-btn w-[30px] h-[30px] dark:hover:bg-gray-700 hover:bg-gray-300 flex justify-center items-center rounded-full"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -101,9 +106,9 @@
         </div>
         <div class="dates block grid grid-cols-7 float-left gap-2"></div>
       </div>
-      <div class="main border-l w-full">
+      <div class="main border-l dark:border-zinc-700 w-full">
         <div
-          class="selected-date bg-emerald-600 text-white p-4 flex items-center justify-between"
+          class="selected-date bg-emerald-600 dark:bg-emerald-800 text-white p-4 flex items-center justify-between"
         >
           <div class="header">
             <p class="selected-date-text text-2xl font-semibold"></p>
@@ -127,12 +132,14 @@
             Add Event
           </button>
         </div>
-        <div class="time-schedule relative overflow-auto h-[583px]"></div>
+        <div
+          class="time-schedule relative divide-y divide-zinc-300 dark:divide-zinc-700 overflow-auto h-[583px]"
+        ></div>
       </div>
     </div>
     <dialog
       id="addTask"
-      class="absolute max-w-[500px] rounded-lg top-[50%] w-[60%] translate-y-[-50%] bg-white shadow-lg p-6"
+      class="absolute max-w-[500px] rounded-lg top-[50%] w-[60%] translate-y-[-50%] bg-white dark:bg-gray-900 dark:text-white shadow-lg p-6"
     >
       <div class="header flex items-center justify-between mb-4">
         <p class="text-2xl font-semibold">Add event</p>
@@ -157,13 +164,13 @@
         <div class="from-to w-full flex items-center gap-2">
           <label class="font-semibold">From:</label>
           <input
-            class="bg-gray-100 border border-gray-300 p-1.5 px-3 grow rounded-lg"
+            class="bg-gray-100 dark:bg-gray-800 border border-gray-600 p-1.5 px-3 grow rounded-lg"
             type="time"
             id="from-time"
           />
           <label class="font-semibold">To:</label>
           <input
-            class="bg-gray-100 p-1.5 px-3 grow border border-gray-300 rounded-lg"
+            class="bg-gray-100 dark:bg-gray-800 p-1.5 px-3 grow border border-gray-600 rounded-lg"
             type="time"
             id="to-time"
           />
@@ -173,7 +180,7 @@
         <div class="inp flex flex-col gap-2">
           <label class="font-semibold">Title</label>
           <input
-            class="bg-gray-100 p-1.5 px-3 rounded-lg border border-gray-300"
+            class="bg-gray-100 dark:bg-gray-800 p-1.5 px-3 rounded-lg border border-gray-600"
             placeholder="Title"
             type="text"
             id="title-time"
@@ -183,7 +190,7 @@
         <div class="textarea flex flex-col gap-2">
           <label class="font-semibold">Description</label>
           <textarea
-            class="bg-gray-100 resize-none rounded-lg h-[100px] py-1.5 px-3 border border-gray-300"
+            class="bg-gray-100 dark:bg-gray-800 resize-none rounded-lg h-[100px] py-1.5 px-3 border border-gray-600"
             placeholder="Description"
             id="desc-time"
           ></textarea>
@@ -221,7 +228,10 @@
     >
       <div class="flex pb-3 font-semibold justify-between items-center">
         <h2 class="text-2xl text-emerald-600">Event</h2>
-        <button class="text-gray-600" onclick="this.parentElement.parentElement.classList.add('hidden')">
+        <button
+          class="text-gray-600"
+          onclick="this.parentElement.parentElement.classList.add('hidden')"
+        >
           <svg
             xmlns="http:www.w3.org/2000/svg"
             width="2em"
@@ -235,8 +245,13 @@
           </svg>
         </button>
       </div>
-      <p id="panel-time" class="flex font-semibold gap-2 text-zinc-500 items-center"></p>
-      <p id="panel-task" class="text-xl py-3 text-emerald-600 font-bold">Eating</p>
+      <p
+        id="panel-time"
+        class="flex font-semibold gap-2 text-zinc-500 items-center"
+      ></p>
+      <p id="panel-task" class="text-xl py-3 text-emerald-600 font-bold">
+        Eating
+      </p>
       <p id="panel-desc"></p>
     </div>
     <script src="./app.js"></script>

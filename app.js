@@ -125,7 +125,7 @@ function showCal() {
   for (let i = 1; i < days + 1; i++) {
     const wrapper = document.createElement("div");
     wrapper.className =
-      "date-elm text-center w-[30px] h-[30px] hover:bg-gray-200 flex justify-center items-center rounded-full select-none group relative";
+      "date-elm text-center w-[30px] h-[30px] dark:hover:bg-gray-700 hover:bg-gray-200 flex justify-center dark:hover-:bg-gray-700 items-center rounded-full select-none group relative";
     wrapper.innerHTML = i;
     wrapper.innerHTML += `<div class="tip transition-opacity absolute top-[25px] bg-transparent text-transparent p-1 px-2 rounded-lg text-xs opacity-0 group-hover:opacity-100 group-hover:bg-black/70 group-hover:text-white z-[99]"></div>`;
     daysElm.append(wrapper);
@@ -174,12 +174,12 @@ function showTimeSchedule() {
   const timeSchedule = document.querySelector(".time-schedule");
   timeSchedule.innerHTML = "";
   for (let i = 1; i <= 24; i++) {
-    timeSchedule.innerHTML += `<div class="time-block h-[200px] border-b flex gap-3">
+    timeSchedule.innerHTML += `<div class="time-block h-[200px] flex gap-3">
     <div class="time p-3">
       <p class="time-info">${i > 12 ? i - 12 : i} ${
       i < 12 ? "AM" : i === 24 ? "AM" : "PM"
     }</p>
-      <button id="addEventBtn" class="text-emerald-600 hover:bg-gray-100 rounded-full p-1">
+      <button id="addEventBtn" class="text-emerald-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full p-1">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="1.7em"
@@ -206,6 +206,13 @@ const dialog = document.querySelector("#addTask");
 
 addEventBtn.addEventListener("click", () => {
   addModalFunctions(dialog, null);
+});
+
+document.addEventListener("keydown", (e) => {
+  e.preventDefault();
+  if (e.shiftKey && e.key === "A") {
+    addModalFunctions(dialog, null);
+  }
 });
 
 function addEvents() {
@@ -248,16 +255,14 @@ function addModalFunctions(dialog, timeText) {
   let toMins = parseInt(toTime.value.split(":")[1]);
   let toHH = parseInt(toTime.value.split(":")[0]);
 
-
   fromTime.addEventListener("input", (e) => {
     fromMins = parseInt(fromTime.value.split(":")[1]);
-    fromHH = parseInt(fromTime.value.split(":")[0]);;
+    fromHH = parseInt(fromTime.value.split(":")[0]);
 
     if (toHH < fromHH) {
       toTime.value = fromTime.value;
     }
   });
-
 
   toTime.addEventListener("input", (e) => {
     toMins = parseInt(fromTime.value.split(":")[1]);
@@ -380,7 +385,7 @@ function displayTasks() {
   localStorage.setItem("EVENTS", JSON.stringify(EVENTS));
   addEvents();
   eventOptions();
-  showInfo()
+  showInfo();
 }
 
 function hasCollided(a, b) {
@@ -477,7 +482,7 @@ function setCurrDate() {
     ) {
       selectedDate.date = parseInt(d.innerText);
       d.id = "today";
-      d.classList.remove("hover:bg-gray-200");
+      // d.classList.remove("hover:bg-gray-200");
       d.classList.add("text-white");
       d.classList.add("bg-emerald-700");
       d.classList.add("hover:bg-emerald-800");
@@ -492,7 +497,8 @@ function selectDates() {
     d.addEventListener("click", () => {
       dateElm.forEach((d) => {
         if (d.id != "today") {
-          d.classList.add("hover:bg-gray-200");
+          // d.classList.add("hover:bg-gray-200");
+          // d.classList.add("dark:hover:bg-gray-700");
           d.classList.remove("text-white");
           d.classList.remove("bg-emerald-500");
           d.classList.remove("hover:bg-emerald-600");
@@ -525,7 +531,7 @@ function setMonthYear() {
   monthElm.innerHTML = MONTHS[MONTH - 1] + " " + YEAR;
 }
 
-let currEvID = null
+let currEvID = null;
 
 function eventOptions() {
   document.querySelectorAll(".event").forEach((ev) => {
@@ -537,41 +543,38 @@ function eventOptions() {
       eventMenu.style.left = e.clientX + "px";
       eventMenu.style.top = e.clientY + "px";
 
-      currEvID = ev.id
-
+      currEvID = ev.id;
     });
-
   });
-  
-  
+
   document.addEventListener("click", (e) => {
     if (!e.target.contains(document.querySelector(".event-menu"))) {
       const eventMenu = document.querySelector(".event-menu");
-      
+
       eventMenu.classList.add("hidden");
     }
   });
 }
 
-function showInfo(){
-  document.querySelectorAll(".event").forEach((ev)=>{
-    ev.addEventListener("click", ()=>{
-
-      currEvID = ev.id
+function showInfo() {
+  document.querySelectorAll(".event").forEach((ev) => {
+    ev.addEventListener("click", () => {
+      currEvID = ev.id;
 
       EVENTS.forEach((f) => {
         f.events.forEach((a) => {
           if (a.id === currEvID) {
-            document.querySelector("#panel-time").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M5 22q-.825 0-1.412-.587T3 20V6q0-.825.588-1.412T5 4h1V2h2v2h8V2h2v2h1q.825 0 1.413.588T21 6v4.675q0 .425-.288.713t-.712.287q-.425 0-.712-.288T19 10.676V10H5v10h5.8q.425 0 .713.288T11.8 21q0 .425-.288.713T10.8 22zm13 1q-2.075 0-3.537-1.463T13 18q0-2.075 1.463-3.537T18 13q2.075 0 3.538 1.463T23 18q0 2.075-1.463 3.538T18 23m1.675-2.625l.7-.7L18.5 17.8V15h-1v3.2z"/></svg> from ${a.fromTime} to ${a.toTime}`
-            document.querySelector(".panel").classList.toggle("hidden")
-            document.getElementById("panel-task").innerText = a.title
-            document.getElementById("panel-desc").innerText = a.description
+            document.querySelector(
+              "#panel-time"
+            ).innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M5 22q-.825 0-1.412-.587T3 20V6q0-.825.588-1.412T5 4h1V2h2v2h8V2h2v2h1q.825 0 1.413.588T21 6v4.675q0 .425-.288.713t-.712.287q-.425 0-.712-.288T19 10.676V10H5v10h5.8q.425 0 .713.288T11.8 21q0 .425-.288.713T10.8 22zm13 1q-2.075 0-3.537-1.463T13 18q0-2.075 1.463-3.537T18 13q2.075 0 3.538 1.463T23 18q0 2.075-1.463 3.538T18 23m1.675-2.625l.7-.7L18.5 17.8V15h-1v3.2z"/></svg> from ${a.fromTime} to ${a.toTime}`;
+            document.querySelector(".panel").classList.toggle("hidden");
+            document.getElementById("panel-task").innerText = a.title;
+            document.getElementById("panel-desc").innerText = a.description;
           }
         });
       });
-    })
-    
-  })
+    });
+  });
 }
 
 const delEv = document.querySelector("#deleteMenu");
@@ -590,7 +593,7 @@ editEv.addEventListener("click", () => {
   EVENTS.forEach((f) => {
     f.events.forEach((a) => {
       if (a.id === currEvID) {
-        const edit = prompt("Edit:")
+        const edit = prompt("Edit:");
         editEvent(a, edit);
       }
     });
@@ -600,11 +603,11 @@ editEv.addEventListener("click", () => {
 function editEvent(evnt, edited) {
   EVENTS.forEach((ev) => {
     if (ev.name === selectedDateString) {
-      ev.events.forEach(f =>{
-        if(f === evnt){
-          f.title = edited
+      ev.events.forEach((f) => {
+        if (f === evnt) {
+          f.title = edited;
         }
-      })
+      });
     }
   });
   displayTasks();

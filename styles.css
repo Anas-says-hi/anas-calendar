@@ -9,7 +9,7 @@
 }
 
 *::selection {
-  background-color: black;
+  background-color: #075985;
   color: white;
 }
 
@@ -18,7 +18,11 @@ dialog::backdrop {
 }
 
 .active{
-  outline: solid 3px black;
+  outline: solid 3px #000000;
+}
+
+.dark .active{
+  outline: solid 3px #ffffff;
 }
 
 .event::-webkit-scrollbar{
@@ -26,10 +30,21 @@ dialog::backdrop {
 }
 
 #panel-desc{
-  background-color: #f4f4f5;
+  background-color: hwb(240 96% 4%);
   padding: .5em;
   border-radius: .5em;
 }
 #panel-desc:empty{
   background-color: transparent;
+}
+
+
+@media only screen and (max-width: 700px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .calendar{
+    margin-inline: auto;
+  }
 }
