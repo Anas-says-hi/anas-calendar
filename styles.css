@@ -30,7 +30,7 @@ dialog::backdrop {
 }
 
 #panel-desc{
-  background-color: hwb(240 96% 4%);
+  background-color: rgb(245, 245, 245);
   padding: .5em;
   border-radius: .5em;
 }
@@ -47,4 +47,13 @@ dialog::backdrop {
   .calendar{
     margin-inline: auto;
   }
+}
+
+.time-schedule::-webkit-scrollbar{
+  background-color: transparent;
+}
+
+.time-schedule::-webkit-scrollbar-thumb{
+  background-color: #0596686f;
+  border-radius: 10000px;
 }
